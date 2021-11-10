@@ -6,17 +6,17 @@ import org.junit.Test;
 
 public class ParkingLotTest {
     ParkingLot parkingLot = null;
-    Object vehicle = null;
+    Vehicle vehicle = null;
 
     @Before
     public void setUp(){
-        vehicle = new Object();
+        vehicle = new Vehicle(9760);
         parkingLot = new ParkingLot();
     }
 
     @Test
     public void givenAVehicle_whenParked_ShouldReturnTrue() {
-        boolean isParked = parkingLot.park(new Object());
+        boolean isParked = parkingLot.park(new Vehicle(8875));
         Assert.assertTrue(isParked);
     }
 
@@ -30,8 +30,7 @@ public class ParkingLotTest {
     @Test
     public void givenAVehicle_whenAlreadyParked_ShouldReturnFalse() {
         parkingLot.park(vehicle);
-        parkingLot.unPark(vehicle);
-        var isParked = parkingLot.park(vehicle);
+        boolean isParked = parkingLot.park(vehicle);
         Assert.assertFalse(isParked);
     }
 }
