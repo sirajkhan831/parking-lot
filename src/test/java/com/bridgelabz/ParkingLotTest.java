@@ -1,36 +1,36 @@
 package com.bridgelabz;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ParkingLotTest {
     ParkingLot parkingLot = null;
     Vehicle vehicle = null;
 
-    @Before
-    public void setUp(){
-        vehicle = new Vehicle(9760);
+    @BeforeEach
+    void setUp() {
         parkingLot = new ParkingLot();
+        vehicle = new Vehicle(9760);
     }
 
     @Test
-    public void givenAVehicle_whenParked_ShouldReturnTrue() {
-        boolean isParked = parkingLot.park(new Vehicle(8875));
-        Assert.assertTrue(isParked);
+    void checkOne() {
+        Assertions.assertTrue(parkingLot.park(vehicle));
     }
 
+
     @Test
-    public void givenAVehicle_whenUnParked_ShouldReturnTrue() {
+    void givenAVehicle_whenUnParked_ShouldReturnTrue() {
         parkingLot.park(vehicle);
         boolean isUnParked = parkingLot.unPark(vehicle);
-        Assert.assertTrue(isUnParked);
+        Assertions.assertTrue(isUnParked);
     }
 
     @Test
-    public void givenAVehicle_whenAlreadyParked_ShouldReturnFalse() {
+    void givenAVehicle_whenAlreadyParked_ShouldReturnFalse() {
         parkingLot.park(vehicle);
         boolean isParked = parkingLot.park(vehicle);
-        Assert.assertFalse(isParked);
+        Assertions.assertFalse(isParked);
     }
 }
