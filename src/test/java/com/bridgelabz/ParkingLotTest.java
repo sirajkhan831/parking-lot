@@ -11,26 +11,40 @@ public class ParkingLotTest {
     @BeforeEach
     void setUp() {
         parkingLot = new ParkingLot();
-        vehicle = new Vehicle(9760);
+        vehicle = null;
     }
 
     @Test
-    void checkOne() {
-        Assertions.assertTrue(parkingLot.park(vehicle));
+    void givenAVehicle_ifParked_ShouldReturnTrue() {
+        try {
+            parkingLot.park(vehicle);
+            boolean isParked = parkingLot.isVehicleParked(vehicle);
+            Assertions.assertTrue(isParked);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
     }
 
 
     @Test
     void givenAVehicle_whenUnParked_ShouldReturnTrue() {
-        parkingLot.park(vehicle);
-        boolean isUnParked = parkingLot.unPark(vehicle);
-        Assertions.assertTrue(isUnParked);
+        try {
+            parkingLot.park(vehicle);
+            boolean isUnParked = parkingLot.unPark(vehicle);
+            Assertions.assertTrue(isUnParked);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     void givenAVehicle_whenAlreadyParked_ShouldReturnFalse() {
-        parkingLot.park(vehicle);
-        boolean isParked = parkingLot.park(vehicle);
-        Assertions.assertFalse(isParked);
+        try {
+            parkingLot.park(vehicle);
+            parkingLot.park(vehicle);
+        } catch (ParkingLotException e) {
+            Assertions.assertEquals("Parking failed", e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

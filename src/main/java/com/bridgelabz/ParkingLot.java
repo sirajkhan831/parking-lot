@@ -13,20 +13,16 @@ public class ParkingLot {
     private Vehicle vehicle;
 
     /**
-     *
      * @param vehicle -> Required to park the given vehicle.
-     * @return -> Returns boolean by checking if the given vehicle is already parked.
      */
-    public boolean park(Vehicle vehicle) {
+    public void park(Vehicle vehicle) throws ParkingLotException {
         if (this.vehicle != null) {
-            return false;
+            throw new ParkingLotException("Parking failed");
         }
         this.vehicle = vehicle;
-        return true;
     }
 
     /**
-     *
      * @param vehicle -> Required to un-park the given vehicle.
      * @return -> Returns boolean by checking if the given vehicle exists.
      */
@@ -39,5 +35,9 @@ public class ParkingLot {
             return true;
         }
         return false;
+    }
+
+    public boolean isVehicleParked(Vehicle vehicle) {
+        return this.vehicle == vehicle;
     }
 }
