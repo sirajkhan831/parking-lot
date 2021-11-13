@@ -1,28 +1,24 @@
 package com.bridgelabz;
 
-import java.util.Objects;
-
 /**
  * @author -> Siraj
  * @version -> 0.1
  * @since -> 10/11/2021
  */
 public class Vehicle {
-    private final int number;
+    private final String vehicleNumber;
+    private final String vehicleName;
 
-    public Vehicle(int number) {
-        this.number = number;
+    public Vehicle(String vehicleNumber, String vehicleName) {
+        this.vehicleNumber = vehicleNumber;
+        this.vehicleName = vehicleName;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Vehicle vehicle = (Vehicle) o;
-        return number == vehicle.number;
+    public String getVehicleNumber() {
+        return vehicleNumber;
     }
 
-    public int getNumber() {
-        return number;
+    public String getVehicleName() {
+        return vehicleName;
     }
 }
