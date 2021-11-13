@@ -51,7 +51,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    void givenLotAtMaxCap_ShouldInformOwner() {
+    void givenCapacityIsFull_ShouldInformOwner() {
         parkingLot.registerOwner(owner);
         parkingLot.setMaxCapacity(4);
         Vehicle swift = new Vehicle("MP013344", "Swift");

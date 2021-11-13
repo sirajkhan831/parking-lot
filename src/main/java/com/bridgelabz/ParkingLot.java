@@ -15,7 +15,6 @@ public class ParkingLot {
     private ParkingLotOwner owner;
     private AirportSecurity airportSecurity;
     private int maxCapacity;
-    private int currentCapacity = 0;
     private final LinkedList<Vehicle> vehicles = new LinkedList<>();
 
     public ParkingLot(int maxCapacity, ParkingLotOwner owner, AirportSecurity airportSecurity) {
@@ -33,9 +32,11 @@ public class ParkingLot {
                 throw new ParkingLotException("Vehicle already Parked");
             }
         }
-        vehicles.add(vehicle);
-        currentCapacity++;
-        if (currentCapacity == maxCapacity) {
+        if (vehicles.size() < maxCapacity) {
+            vehicles.add(vehicle);
+            System.out.println(vehicle.getVehicleName());
+        }
+        if (vehicles.size() >= maxCapacity) {
             capacityFull();
             throw new ParkingLotException("Parking lot is full");
         }
@@ -92,7 +93,6 @@ public class ParkingLot {
 
     /**
      * Purpose -> This method sets the max capacity of the parking lot.
-     *
      */
     public void capacityFull() {
         owner.capacityFull();
