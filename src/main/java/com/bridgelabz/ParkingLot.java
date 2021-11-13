@@ -8,6 +8,7 @@ import java.util.LinkedList;
  * @since -> 10/11/2021
  */
 public class ParkingLot {
+
     /**
      * This program manages parking spaces for vehicles.
      */
@@ -56,6 +57,10 @@ public class ParkingLot {
         return false;
     }
 
+    /**
+     * Purpose -> This method registers the owner for the parking lot
+     * @param owner -> Required to set the owner
+     */
     public void registerOwner(ParkingLotOwner owner) {
         this.owner = owner;
     }
