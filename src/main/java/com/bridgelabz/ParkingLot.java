@@ -12,15 +12,13 @@ public class ParkingLot {
     /**
      * This program manages parking spaces for vehicles.
      */
-    private Vehicle vehicle;
-
     private ParkingLotOwner owner;
-    private final int maxCapacity;
-    private int currentCapacity;
+    private AirportSecurity airportSecurity;
+    private int maxCapacity;
+    private int currentCapacity = 0;
     private final LinkedList<Vehicle> vehicles = new LinkedList<>();
 
     public ParkingLot(int maxCapacity) {
-        this.currentCapacity = 0;
         this.maxCapacity = maxCapacity;
     }
 
@@ -28,37 +26,34 @@ public class ParkingLot {
      * @param vehicle -> Required to park the given vehicle.
      */
     public void park(Vehicle vehicle) throws ParkingLotException {
-        if (currentCapacity == maxCapacity && this.owner != null) {
-            this.owner.capacityFull();
-            throw new ParkingLotException("Parking lot full");
+        for (Vehicle currentVehicle : vehicles) {
+            if (currentVehicle.equals(vehicle)) {
+                throw new ParkingLotException("Vehicle already Parked");
+            }
         }
-        if (this.vehicle != null && this.vehicle.equals(vehicle)) {
-            throw new ParkingLotException("Vehicle already parked");
-        }
-        currentCapacity++;
-        this.vehicle = vehicle;
         vehicles.add(vehicle);
+        currentCapacity++;
+        if (currentCapacity == maxCapacity) {
+            if (owner != null) {
+                owner.capacityFull();
+            }
+            if (airportSecurity != null) {
+                airportSecurity.capacityFull();
+            }
+            throw new ParkingLotException("Parking lot is full");
+        }
     }
 
     /**
      * @param vehicle -> Required to un-park the given vehicle.
-     * @return -> Returns boolean by checking if the given vehicle exists.
      */
-    public boolean unPark(Vehicle vehicle) {
-        if (vehicle == null) {
-            return false;
-        }
-        for (Vehicle vehicle1 : vehicles) {
-            if (vehicle.equals(vehicle1)) {
-                vehicles.remove(vehicle1);
-                return true;
-            }
-        }
-        return false;
+    public void unPark(Vehicle vehicle) {
+        vehicles.removeIf(vehicle::equals);
     }
 
     /**
      * Purpose -> This method registers the owner for the parking lot
+     *
      * @param owner -> Required to set the owner
      */
     public void registerOwner(ParkingLotOwner owner) {
@@ -66,10 +61,35 @@ public class ParkingLot {
     }
 
     /**
+     * Purpose -> This method registers the airport security for the parking lot
+     *
+     * @param airportSecurity -> Required to set the airport security
+     */
+    public void registerAirportSecurity(AirportSecurity airportSecurity) {
+        this.airportSecurity = airportSecurity;
+    }
+
+    /**
      * @param vehicle -> Required to get the current status of the given vehicle.
      * @return -> Return true if the vehicle is parked
      */
     public boolean isVehicleParked(Vehicle vehicle) {
-        return this.vehicle == vehicle;
+        boolean vehicleExists = false;
+        for (Vehicle currentVehicle : vehicles) {
+            if (currentVehicle.equals(vehicle)) {
+                vehicleExists = true;
+                break;
+            }
+        }
+        return vehicleExists;
+    }
+
+    /**
+     * Purpose -> This method sets the max capacity of the parking lot.
+     *
+     * @param maxCapacity -> Required to set the max capacity of the parking lot.
+     */
+    public void setMaxCapacity(int maxCapacity) {
+        this.maxCapacity = maxCapacity;
     }
 }

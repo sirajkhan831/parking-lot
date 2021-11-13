@@ -6,18 +6,20 @@ import org.junit.jupiter.api.Test;
 
 public class ParkingLotTest {
     ParkingLot parkingLot = null;
-    Vehicle innova = null;
     ParkingLotOwner owner = null;
+    Vehicle innova = null;
+    AirportSecurity airportSecurity = null;
 
     @BeforeEach
     void setUp() {
-        parkingLot = new ParkingLot(3);
+        innova = new Vehicle("KA012311", "Innova");
+        parkingLot = new ParkingLot(10);
         owner = new ParkingLotOwner();
+        airportSecurity = new AirportSecurity();
     }
 
     @Test
     void givenAVehicle_ifParked_ShouldReturnTrue() {
-        innova = new Vehicle("KA012311", "Innova");
         try {
             parkingLot.park(innova);
             boolean isParked = parkingLot.isVehicleParked(innova);
@@ -29,11 +31,10 @@ public class ParkingLotTest {
 
     @Test
     void givenAVehicle_whenUnParked_ShouldReturnTrue() {
-        innova = new Vehicle("KA012311", "Innova");
         try {
             parkingLot.park(innova);
-            var isUnParked = parkingLot.unPark(innova);
-            Assertions.assertTrue(isUnParked);
+            parkingLot.unPark(innova);
+            Assertions.assertFalse(parkingLot.isVehicleParked(innova));
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
@@ -41,7 +42,6 @@ public class ParkingLotTest {
 
     @Test
     void givenAVehicle_whenAlreadyParked_ShouldReturnFalse() {
-        innova = new Vehicle("KA012311", "Innova");
         try {
             parkingLot.park(innova);
         } catch (ParkingLotException e) {
@@ -51,9 +51,9 @@ public class ParkingLotTest {
     }
 
     @Test
-    void givenLotAtMaxCap_whenRequestedByOwner_shouldReturnTrue() {
+    void givenLotAtMaxCap_ShouldInformOwner() {
         parkingLot.registerOwner(owner);
-        innova = new Vehicle("KA012311", "Innova");
+        parkingLot.setMaxCapacity(4);
         Vehicle swift = new Vehicle("MP013344", "Swift");
         Vehicle alto = new Vehicle("MP023344", "Alto");
         Vehicle santro = new Vehicle("CG043344", "Santro");
@@ -64,8 +64,35 @@ public class ParkingLotTest {
             parkingLot.park(santro);
             Assertions.assertTrue(owner.isAtMaxCapacity());
         } catch (ParkingLotException e) {
+            Assertions.assertEquals("Parking lot is full", e.getMessage());
+        }
+    }
+
+    @Test
+    void givenCapacityIs2_ShouldBeAbleToPark2Vehicle() throws ParkingLotException {
+        parkingLot.setMaxCapacity(2);
+        Vehicle santro = new Vehicle("CG043344", "Santro");
+        Vehicle swift = new Vehicle("MP013344", "Swift");
+        parkingLot.park(swift);
+        parkingLot.park(santro);
+        Assertions.assertTrue(parkingLot.isVehicleParked(santro) && parkingLot.isVehicleParked(swift));
+    }
+
+    @Test
+    void givenCapacityIsFull_ShouldInformAirportSecurity() {
+        parkingLot.registerAirportSecurity(airportSecurity);
+        parkingLot.setMaxCapacity(4);
+        Vehicle swift = new Vehicle("MP013344", "Swift");
+        Vehicle alto = new Vehicle("MP023344", "Alto");
+        Vehicle santro = new Vehicle("CG043344", "Santro");
+        try {
+            parkingLot.park(innova);
+            parkingLot.park(swift);
+            parkingLot.park(alto);
+            parkingLot.park(santro);
             Assertions.assertTrue(owner.isAtMaxCapacity());
-            System.out.println(e.getMessage());
+        } catch (ParkingLotException e) {
+            Assertions.assertEquals("Parking lot is full", e.getMessage());
         }
     }
 }
