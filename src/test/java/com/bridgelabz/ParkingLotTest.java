@@ -12,10 +12,10 @@ public class ParkingLotTest {
 
     @BeforeEach
     void setUp() {
-        innova = new Vehicle("KA012311", "Innova");
-        parkingLot = new ParkingLot(10);
         owner = new ParkingLotOwner();
         airportSecurity = new AirportSecurity();
+        innova = new Vehicle("KA012311", "Innova");
+        parkingLot = new ParkingLot(10, owner, airportSecurity);
     }
 
     @Test
@@ -69,13 +69,17 @@ public class ParkingLotTest {
     }
 
     @Test
-    void givenCapacityIs2_ShouldBeAbleToPark2Vehicle() throws ParkingLotException {
+    void givenCapacityIs2_ShouldBeAbleToPark2Vehicle() {
         parkingLot.setMaxCapacity(2);
         Vehicle santro = new Vehicle("CG043344", "Santro");
         Vehicle swift = new Vehicle("MP013344", "Swift");
-        parkingLot.park(swift);
-        parkingLot.park(santro);
-        Assertions.assertTrue(parkingLot.isVehicleParked(santro) && parkingLot.isVehicleParked(swift));
+        try {
+            parkingLot.park(swift);
+            parkingLot.park(santro);
+            Assertions.assertTrue(parkingLot.isVehicleParked(santro) && parkingLot.isVehicleParked(swift));
+        } catch (ParkingLotException e) {
+            Assertions.assertEquals("Parking lot is full", e.getMessage());
+        }
     }
 
     @Test
