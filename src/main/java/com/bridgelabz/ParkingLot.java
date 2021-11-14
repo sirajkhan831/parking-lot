@@ -17,6 +17,7 @@ public class ParkingLot {
     private AirportSecurity airportSecurity;
     private final int maxCapacity;
     private final HashMap<Integer, Vehicle> vehicles = new HashMap<>();
+    private final HashMap<Integer, String> vehicleTimeStamp = new HashMap<>();
 
     public ParkingLot(int maxCapacity, ParkingLotOwner owner, AirportSecurity airportSecurity) {
         this.maxCapacity = setMaxCapacity(maxCapacity);
@@ -25,6 +26,7 @@ public class ParkingLot {
         int index = 0;
         for (int i = 0; i < this.maxCapacity; i++) {
             vehicles.put(index, null);
+            vehicleTimeStamp.put(index, null);
             index++;
         }
     }
@@ -34,13 +36,14 @@ public class ParkingLot {
      *
      * @param vehicle -> Required to park the given vehicle.
      */
-    public void park(Vehicle vehicle) throws ParkingLotException {
+    public void park(Vehicle vehicle, String timeStamp) throws ParkingLotException {
         if (isVehicleParked(vehicle)) {
             throw new ParkingLotException("Already parked");
         }
         for (int i = 0; i < vehicles.size(); i++) {
             if (vehicles.get(i) == null) {
                 vehicles.put(i, vehicle);
+                vehicleTimeStamp.put(i, timeStamp);
                 break;
             }
         }
@@ -62,6 +65,7 @@ public class ParkingLot {
         for (Map.Entry<Integer, Vehicle> entry : vehicles.entrySet()) {
             if (entry.getValue() != null && entry.getValue().equals(vehicle)) {
                 vehicles.put(entry.getKey(), null);
+                vehicleTimeStamp.put(entry.getKey(), null);
             }
         }
     }
@@ -126,5 +130,14 @@ public class ParkingLot {
             }
         }
         return -1;
+    }
+
+    /**
+     *
+     * @param vehicle -> Required to check the given vehicle position
+     * @return -> Returns vehicle timestamp
+     */
+    public String getTimeStamp(Vehicle vehicle) {
+        return vehicleTimeStamp.get(getVehiclePosition(vehicle) - 1);
     }
 }

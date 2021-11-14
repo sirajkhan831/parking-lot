@@ -21,7 +21,7 @@ public class ParkingLotTest {
     @Test
     void givenAVehicle_ifParked_ShouldReturnTrue() {
         try {
-            parkingLot.park(innova);
+            parkingLot.park(innova, "09:10");
             boolean isParked = parkingLot.isVehicleParked(innova);
             Assertions.assertTrue(isParked);
         } catch (ParkingLotException e) {
@@ -33,7 +33,7 @@ public class ParkingLotTest {
     @Test
     void givenAVehicle_whenUnParked_ShouldReturnTrue() {
         try {
-            parkingLot.park(innova);
+            parkingLot.park(innova, "09:10");
             parkingLot.unPark(innova);
             Assertions.assertFalse(parkingLot.isVehicleParked(innova));
         } catch (ParkingLotException e) {
@@ -45,8 +45,8 @@ public class ParkingLotTest {
     @Test
     void givenAVehicle_whenAlreadyParked_ShouldReturnFalse() {
         Assertions.assertThrows(ParkingLotException.class, () -> {
-            parkingLot.park(innova);
-            parkingLot.park(innova);
+            parkingLot.park(innova, "09:10");
+            parkingLot.park(innova, "09:10");
         });
     }
 
@@ -59,10 +59,10 @@ public class ParkingLotTest {
         Vehicle alto = new Vehicle("MP023344", "Alto");
         Vehicle santro = new Vehicle("CG043344", "Santro");
         try {
-            parkingLot.park(innova);
-            parkingLot.park(swift);
-            parkingLot.park(alto);
-            parkingLot.park(santro);
+            parkingLot.park(innova, "09:10");
+            parkingLot.park(swift, "09:10");
+            parkingLot.park(alto, "09:10");
+            parkingLot.park(santro, "09:10");
             Assertions.assertTrue(owner.isAtMaxCapacity());
         } catch (ParkingLotException e) {
             Assertions.assertTrue(owner.isAtMaxCapacity());
@@ -76,8 +76,8 @@ public class ParkingLotTest {
         Vehicle santro = new Vehicle("CG043344", "Santro");
         Vehicle swift = new Vehicle("MP013344", "Swift");
         try {
-            parkingLot.park(swift);
-            parkingLot.park(santro);
+            parkingLot.park(swift, "09:10");
+            parkingLot.park(santro, "09:10");
             Assertions.assertTrue(parkingLot.isVehicleParked(santro) && parkingLot.isVehicleParked(swift));
         } catch (ParkingLotException e) {
             Assertions.assertTrue(parkingLot.isVehicleParked(santro) && parkingLot.isVehicleParked(swift));
@@ -93,10 +93,10 @@ public class ParkingLotTest {
         Vehicle alto = new Vehicle("MP023344", "Alto");
         Vehicle santro = new Vehicle("CG043344", "Santro");
         try {
-            parkingLot.park(innova);
-            parkingLot.park(swift);
-            parkingLot.park(alto);
-            parkingLot.park(santro);
+            parkingLot.park(innova, "09:10");
+            parkingLot.park(swift, "09:10");
+            parkingLot.park(alto, "09:10");
+            parkingLot.park(santro, "09:10");
             Assertions.assertTrue(owner.isAtMaxCapacity());
         } catch (ParkingLotException e) {
             Assertions.assertTrue(owner.isAtMaxCapacity());
@@ -112,10 +112,10 @@ public class ParkingLotTest {
         Vehicle alto = new Vehicle("MP023344", "Alto");
         Vehicle santro = new Vehicle("CG043344", "Santro");
         try {
-            parkingLot.park(innova);
-            parkingLot.park(swift);
-            parkingLot.park(alto);
-            parkingLot.park(santro);
+            parkingLot.park(innova, "09:10");
+            parkingLot.park(swift, "09:10");
+            parkingLot.park(alto, "09:10");
+            parkingLot.park(santro, "09:10");
             Assertions.assertTrue(owner.isAtMaxCapacity());
             parkingLot.unPark(alto);
             Assertions.assertFalse(owner.isAtMaxCapacity());
@@ -131,18 +131,17 @@ public class ParkingLotTest {
         Vehicle alto = new Vehicle("MP023344", "Alto");
         Vehicle santro = new Vehicle("CG043344", "Santro");
         try {
-            parkingLot.park(swift);
-            parkingLot.park(innova);
-            parkingLot.park(alto);
+            parkingLot.park(swift, "09:10");
+            parkingLot.park(innova, "09:10");
+            parkingLot.park(alto, "09:10");
             parkingLot.unPark((innova));
-            parkingLot.park(santro);
-            parkingLot.park(innova);
+            parkingLot.park(santro, "09:10");
+            parkingLot.park(innova, "09:10");
             Assertions.assertEquals(1, parkingLot.getVehiclePosition(swift));
             Assertions.assertEquals(3, parkingLot.getVehiclePosition(alto));
         } catch (ParkingLotException e) {
             Assertions.assertEquals(4, parkingLot.getVehiclePosition(innova));
             Assertions.assertEquals(2, parkingLot.getVehiclePosition(santro));
-            System.out.println(e.getMessage());
         }
     }
 }
