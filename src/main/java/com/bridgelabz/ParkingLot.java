@@ -16,6 +16,7 @@ public class ParkingLot {
     private ParkingLotOwner owner;
     private AirportSecurity airportSecurity;
     private final int maxCapacity;
+    private boolean isHandicapped;
     private final HashMap<Integer, Vehicle> vehicles = new HashMap<>();
     private final HashMap<Integer, String> vehicleTimeStamp = new HashMap<>();
 
@@ -40,7 +41,15 @@ public class ParkingLot {
         if (isVehicleParked(vehicle)) {
             throw new ParkingLotException("Already parked");
         }
-        for (int i = 0; i < vehicles.size(); i++) {
+        if (isHandicapped) {
+            if (vehicles.get(0) == null) {
+                vehicles.put(0, vehicle);
+                vehicleTimeStamp.put(0, timeStamp);
+            } else {
+                isHandicapped = false;
+            }
+        }
+        for (int i = 1; i < vehicles.size(); i++) {
             if (vehicles.get(i) == null) {
                 vehicles.put(i, vehicle);
                 vehicleTimeStamp.put(i, timeStamp);
@@ -125,19 +134,18 @@ public class ParkingLot {
      */
     public int getVehiclePosition(Vehicle vehicle) {
         for (Map.Entry<Integer, Vehicle> entry : vehicles.entrySet()) {
-            if (entry.getValue().equals(vehicle)) {
-                return (entry.getKey() + 1);
+            if (entry.getValue() != null && entry.getValue().equals(vehicle)) {
+                return (entry.getKey());
             }
         }
         return -1;
     }
 
     /**
-     *
      * @param vehicle -> Required to check the given vehicle position
      * @return -> Returns vehicle timestamp
      */
     public String getTimeStamp(Vehicle vehicle) {
-        return vehicleTimeStamp.get(getVehiclePosition(vehicle) - 1);
+        return vehicleTimeStamp.get(getVehiclePosition(vehicle));
     }
 }
