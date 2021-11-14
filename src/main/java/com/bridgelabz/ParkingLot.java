@@ -148,4 +148,8 @@ public class ParkingLot {
     public String getTimeStamp(Vehicle vehicle) {
         return vehicleTimeStamp.get(getVehiclePosition(vehicle));
     }
+
+    public void setHandicapped(boolean handicapped) {
+        isHandicapped = handicapped;
+    }
 }

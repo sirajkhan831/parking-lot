@@ -154,4 +154,15 @@ public class ParkingLotTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    void givenAHandicappedDriver_ifPossible_ShouldBeGivenFirstSlot() {
+        try {
+            parkingLot.setHandicapped(true);
+            parkingLot.park(innova, "09:10");
+            Assertions.assertEquals(0, parkingLot.getVehiclePosition(innova));
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
 }
