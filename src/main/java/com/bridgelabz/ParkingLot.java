@@ -1,6 +1,7 @@
 package com.bridgelabz;
 
-import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author -> Siraj
@@ -14,13 +15,18 @@ public class ParkingLot {
      */
     private ParkingLotOwner owner;
     private AirportSecurity airportSecurity;
-    private int maxCapacity;
-    private final LinkedList<Vehicle> vehicles = new LinkedList<>();
+    private final int maxCapacity;
+    private final HashMap<Integer, Vehicle> vehicles = new HashMap<>();
 
     public ParkingLot(int maxCapacity, ParkingLotOwner owner, AirportSecurity airportSecurity) {
-        this.maxCapacity = maxCapacity;
+        this.maxCapacity = setMaxCapacity(maxCapacity);
         this.owner = owner;
         this.airportSecurity = airportSecurity;
+        int index = 0;
+        for (int i = 0; i < this.maxCapacity; i++) {
+            vehicles.put(index, null);
+            index++;
+        }
     }
 
     /**
@@ -29,13 +35,14 @@ public class ParkingLot {
      * @param vehicle -> Required to park the given vehicle.
      */
     public void park(Vehicle vehicle) throws ParkingLotException {
-        for (Vehicle currentVehicle : vehicles) {
-            if (currentVehicle.equals(vehicle)) {
-                throw new ParkingLotException("Vehicle already Parked");
-            }
+        if (isVehicleParked(vehicle)) {
+            throw new ParkingLotException("Already parked");
         }
-        if (vehicles.size() < maxCapacity) {
-            vehicles.add(vehicle);
+        for (int i = 0; i < vehicles.size(); i++) {
+            if (vehicles.get(i) == null) {
+                vehicles.put(i, vehicle);
+                break;
+            }
         }
         if (vehicles.size() == maxCapacity) {
             capacityFull(true);
@@ -52,7 +59,11 @@ public class ParkingLot {
      */
     public void unPark(Vehicle vehicle) {
         capacityFull(false);
-        vehicles.removeIf(vehicle::equals);
+        for (Map.Entry<Integer, Vehicle> entry : vehicles.entrySet()) {
+            if (entry.getValue() != null && entry.getValue().equals(vehicle)) {
+                vehicles.put(entry.getKey(), null);
+            }
+        }
     }
 
     /**
@@ -60,7 +71,7 @@ public class ParkingLot {
      *
      * @param owner -> Required to set the owner
      */
-    public void registerOwner(ParkingLotOwner owner) {
+    public void registerObserver(ParkingLotOwner owner) {
         this.owner = owner;
     }
 
@@ -69,7 +80,7 @@ public class ParkingLot {
      *
      * @param airportSecurity -> Required to set the airport security
      */
-    public void registerAirportSecurity(AirportSecurity airportSecurity) {
+    public void registerObserver(AirportSecurity airportSecurity) {
         this.airportSecurity = airportSecurity;
     }
 
@@ -80,14 +91,7 @@ public class ParkingLot {
      * @return -> Return true if the vehicle is parked
      */
     public boolean isVehicleParked(Vehicle vehicle) {
-        boolean vehicleExists = false;
-        for (Vehicle currentVehicle : vehicles) {
-            if (currentVehicle.equals(vehicle)) {
-                vehicleExists = true;
-                break;
-            }
-        }
-        return vehicleExists;
+        return vehicles.containsValue(vehicle);
     }
 
     /**
@@ -95,8 +99,8 @@ public class ParkingLot {
      *
      * @param maxCapacity -> Required to set the max capacity of the parking lot.
      */
-    public void setMaxCapacity(int maxCapacity) {
-        this.maxCapacity = maxCapacity;
+    public int setMaxCapacity(int maxCapacity) {
+        return maxCapacity;
     }
 
     /**
@@ -107,5 +111,20 @@ public class ParkingLot {
     public void capacityFull(boolean capacityCheck) {
         owner.capacityFull(capacityCheck);
         airportSecurity.capacityFull(capacityCheck);
+    }
+
+    /**
+     * Purpose -> This method is used to locate the vehicle in the lot.
+     *
+     * @param vehicle -> Required to check the given vehicle position
+     * @return -> Returns vehicle position
+     */
+    public int getVehiclePosition(Vehicle vehicle) {
+        for (Map.Entry<Integer, Vehicle> entry : vehicles.entrySet()) {
+            if (entry.getValue().equals(vehicle)) {
+                return (entry.getKey() + 1);
+            }
+        }
+        return -1;
     }
 }

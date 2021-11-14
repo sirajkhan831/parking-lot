@@ -15,7 +15,7 @@ public class ParkingLotTest {
         owner = new ParkingLotOwner();
         airportSecurity = new AirportSecurity();
         innova = new Vehicle("KA012311", "Innova");
-        parkingLot = new ParkingLot(10, owner, airportSecurity);
+        parkingLot = new ParkingLot(4, owner, airportSecurity);
     }
 
     @Test
@@ -25,6 +25,7 @@ public class ParkingLotTest {
             boolean isParked = parkingLot.isVehicleParked(innova);
             Assertions.assertTrue(isParked);
         } catch (ParkingLotException e) {
+            Assertions.assertTrue(parkingLot.isVehicleParked(innova));
             e.printStackTrace();
         }
     }
@@ -36,6 +37,7 @@ public class ParkingLotTest {
             parkingLot.unPark(innova);
             Assertions.assertFalse(parkingLot.isVehicleParked(innova));
         } catch (ParkingLotException e) {
+            Assertions.assertFalse(parkingLot.isVehicleParked(innova));
             e.printStackTrace();
         }
     }
@@ -50,7 +52,8 @@ public class ParkingLotTest {
 
     @Test
     void givenCapacityIsFull_ShouldInformOwner() {
-        parkingLot.registerOwner(owner);
+        parkingLot.setMaxCapacity(4);
+        parkingLot.registerObserver(owner);
         parkingLot.setMaxCapacity(4);
         Vehicle swift = new Vehicle("MP013344", "Swift");
         Vehicle alto = new Vehicle("MP023344", "Alto");
@@ -62,6 +65,7 @@ public class ParkingLotTest {
             parkingLot.park(santro);
             Assertions.assertTrue(owner.isAtMaxCapacity());
         } catch (ParkingLotException e) {
+            Assertions.assertTrue(owner.isAtMaxCapacity());
             Assertions.assertEquals("Parking lot is full", e.getMessage());
         }
     }
@@ -76,13 +80,14 @@ public class ParkingLotTest {
             parkingLot.park(santro);
             Assertions.assertTrue(parkingLot.isVehicleParked(santro) && parkingLot.isVehicleParked(swift));
         } catch (ParkingLotException e) {
+            Assertions.assertTrue(parkingLot.isVehicleParked(santro) && parkingLot.isVehicleParked(swift));
             Assertions.assertEquals("Parking lot is full", e.getMessage());
         }
     }
 
     @Test
     void givenCapacityIsFull_ShouldInformAirportSecurity() {
-        parkingLot.registerAirportSecurity(airportSecurity);
+        parkingLot.registerObserver(airportSecurity);
         parkingLot.setMaxCapacity(4);
         Vehicle swift = new Vehicle("MP013344", "Swift");
         Vehicle alto = new Vehicle("MP023344", "Alto");
@@ -94,13 +99,14 @@ public class ParkingLotTest {
             parkingLot.park(santro);
             Assertions.assertTrue(owner.isAtMaxCapacity());
         } catch (ParkingLotException e) {
+            Assertions.assertTrue(owner.isAtMaxCapacity());
             Assertions.assertEquals("Parking lot is full", e.getMessage());
         }
     }
 
     @Test
     void givenWhenParkingLotHasSpace_ShouldInformOwner() {
-        parkingLot.registerOwner(owner);
+        parkingLot.registerObserver(owner);
         parkingLot.setMaxCapacity(4);
         Vehicle swift = new Vehicle("MP013344", "Swift");
         Vehicle alto = new Vehicle("MP023344", "Alto");
@@ -114,6 +120,7 @@ public class ParkingLotTest {
             parkingLot.unPark(alto);
             Assertions.assertFalse(owner.isAtMaxCapacity());
         } catch (ParkingLotException e) {
+            Assertions.assertFalse(owner.isAtMaxCapacity());
             Assertions.assertEquals("Parking lot is full", e.getMessage());
         }
     }
