@@ -11,8 +11,8 @@ public class ParkingLotOwner {
     /**
      * Purpose -> This method is for assigning full parking lot.
      */
-    public void capacityFull() {
-        isAtMaxCapacity = true;
+    public void capacityFull(boolean capacityCheck) {
+        isAtMaxCapacity = capacityCheck;
     }
 
     /**

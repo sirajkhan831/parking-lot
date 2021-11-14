@@ -42,12 +42,10 @@ public class ParkingLotTest {
 
     @Test
     void givenAVehicle_whenAlreadyParked_ShouldReturnFalse() {
-        try {
+        Assertions.assertThrows(ParkingLotException.class, () -> {
             parkingLot.park(innova);
-        } catch (ParkingLotException e) {
-            e.printStackTrace();
-        }
-        Assertions.assertThrows(ParkingLotException.class, () -> parkingLot.park(innova));
+            parkingLot.park(innova);
+        });
     }
 
     @Test
@@ -95,6 +93,26 @@ public class ParkingLotTest {
             parkingLot.park(alto);
             parkingLot.park(santro);
             Assertions.assertTrue(owner.isAtMaxCapacity());
+        } catch (ParkingLotException e) {
+            Assertions.assertEquals("Parking lot is full", e.getMessage());
+        }
+    }
+
+    @Test
+    void givenWhenParkingLotHasSpace_ShouldInformOwner() {
+        parkingLot.registerOwner(owner);
+        parkingLot.setMaxCapacity(4);
+        Vehicle swift = new Vehicle("MP013344", "Swift");
+        Vehicle alto = new Vehicle("MP023344", "Alto");
+        Vehicle santro = new Vehicle("CG043344", "Santro");
+        try {
+            parkingLot.park(innova);
+            parkingLot.park(swift);
+            parkingLot.park(alto);
+            parkingLot.park(santro);
+            Assertions.assertTrue(owner.isAtMaxCapacity());
+            parkingLot.unPark(alto);
+            Assertions.assertFalse(owner.isAtMaxCapacity());
         } catch (ParkingLotException e) {
             Assertions.assertEquals("Parking lot is full", e.getMessage());
         }

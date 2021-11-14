@@ -24,6 +24,8 @@ public class ParkingLot {
     }
 
     /**
+     * Purpose -> This method parks a vehicle in the parking lot.
+     *
      * @param vehicle -> Required to park the given vehicle.
      */
     public void park(Vehicle vehicle) throws ParkingLotException {
@@ -34,18 +36,22 @@ public class ParkingLot {
         }
         if (vehicles.size() < maxCapacity) {
             vehicles.add(vehicle);
-            System.out.println(vehicle.getVehicleName());
         }
-        if (vehicles.size() >= maxCapacity) {
-            capacityFull();
+        if (vehicles.size() == maxCapacity) {
+            capacityFull(true);
+        }
+        if (vehicles.size() > maxCapacity) {
             throw new ParkingLotException("Parking lot is full");
         }
     }
 
     /**
+     * Purpose -> This method un-parks an already parked vehicle
+     *
      * @param vehicle -> Required to un-park the given vehicle.
      */
     public void unPark(Vehicle vehicle) {
+        capacityFull(false);
         vehicles.removeIf(vehicle::equals);
     }
 
@@ -68,6 +74,8 @@ public class ParkingLot {
     }
 
     /**
+     * Purpose -> This method checks if the given vehicle is parked or not.
+     *
      * @param vehicle -> Required to get the current status of the given vehicle.
      * @return -> Return true if the vehicle is parked
      */
@@ -92,10 +100,12 @@ public class ParkingLot {
     }
 
     /**
-     * Purpose -> This method sets the max capacity of the parking lot.
+     * Purpose -> This method informs the owner and airport security about lot's current capacity.
+     *
+     * @param capacityCheck -> If true sets lot at max capacity
      */
-    public void capacityFull() {
-        owner.capacityFull();
-        airportSecurity.capacityFull();
+    public void capacityFull(boolean capacityCheck) {
+        owner.capacityFull(capacityCheck);
+        airportSecurity.capacityFull(capacityCheck);
     }
 }
