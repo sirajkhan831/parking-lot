@@ -144,4 +144,14 @@ public class ParkingLotTest {
             Assertions.assertEquals(2, parkingLot.getVehiclePosition(santro));
         }
     }
+
+    @Test
+    void givenAVehicle_ifRequired_ShouldReturnTimeStamp() {
+        try {
+            parkingLot.park(innova, "09:10");
+            Assertions.assertEquals("09:10", parkingLot.getTimeStamp(innova));
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
 }
