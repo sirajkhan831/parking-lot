@@ -124,4 +124,25 @@ public class ParkingLotTest {
             Assertions.assertEquals("Parking lot is full", e.getMessage());
         }
     }
+
+    @Test
+    void givenAVehicle_whenParked_ShouldReturnParkingPosition() {
+        Vehicle swift = new Vehicle("MP013344", "Swift");
+        Vehicle alto = new Vehicle("MP023344", "Alto");
+        Vehicle santro = new Vehicle("CG043344", "Santro");
+        try {
+            parkingLot.park(swift);
+            parkingLot.park(innova);
+            parkingLot.park(alto);
+            parkingLot.unPark((innova));
+            parkingLot.park(santro);
+            parkingLot.park(innova);
+            Assertions.assertEquals(1, parkingLot.getVehiclePosition(swift));
+            Assertions.assertEquals(3, parkingLot.getVehiclePosition(alto));
+        } catch (ParkingLotException e) {
+            Assertions.assertEquals(4, parkingLot.getVehiclePosition(innova));
+            Assertions.assertEquals(2, parkingLot.getVehiclePosition(santro));
+            System.out.println(e.getMessage());
+        }
+    }
 }
