@@ -8,10 +8,21 @@ package com.bridgelabz;
 public class Vehicle {
     private final String vehicleNumber;
     private final String vehicleName;
+    private boolean isDriverHandicapped;
 
     public Vehicle(String vehicleNumber, String vehicleName) {
         this.vehicleNumber = vehicleNumber;
         this.vehicleName = vehicleName;
+    }
+
+    public Vehicle(String vehicleNumber, String vehicleName, boolean isDriverHandicapped) {
+        this.vehicleNumber = vehicleNumber;
+        this.vehicleName = vehicleName;
+        this.isDriverHandicapped = isDriverHandicapped;
+    }
+
+    public boolean isDriverHandicapped() {
+        return isDriverHandicapped;
     }
 
     public String getVehicleNumber() {

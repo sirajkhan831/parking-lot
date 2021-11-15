@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalTime;
+
 public class ParkingLotTest {
     ParkingLot parkingLot = null;
     ParkingLotOwner owner = null;
@@ -19,150 +21,109 @@ public class ParkingLotTest {
     }
 
     @Test
-    void givenAVehicle_ifParked_ShouldReturnTrue() {
-        try {
-            parkingLot.park(innova, "09:10");
-            boolean isParked = parkingLot.isVehicleParked(innova);
-            Assertions.assertTrue(isParked);
-        } catch (ParkingLotException e) {
-            Assertions.assertTrue(parkingLot.isVehicleParked(innova));
-            e.printStackTrace();
-        }
+    void givenAVehicle_ifParked_ShouldReturnTrue() throws ParkingLotException {
+        parkingLot.park(innova, LocalTime.parse("09:18"));
+        boolean isParked = parkingLot.isVehicleParked(innova);
+        Assertions.assertTrue(isParked);
     }
 
     @Test
-    void givenAVehicle_whenUnParked_ShouldReturnTrue() {
-        try {
-            parkingLot.park(innova, "09:10");
-            parkingLot.unPark(innova);
-            Assertions.assertFalse(parkingLot.isVehicleParked(innova));
-        } catch (ParkingLotException e) {
-            Assertions.assertFalse(parkingLot.isVehicleParked(innova));
-            e.printStackTrace();
-        }
+    void givenAVehicle_whenUnParked_ShouldReturnTrue() throws ParkingLotException {
+        parkingLot.park(innova, LocalTime.parse("09:18"));
+        parkingLot.unPark(innova);
+        Assertions.assertFalse(parkingLot.isVehicleParked(innova));
     }
 
     @Test
     void givenAVehicle_whenAlreadyParked_ShouldReturnFalse() {
         Assertions.assertThrows(ParkingLotException.class, () -> {
-            parkingLot.park(innova, "09:10");
-            parkingLot.park(innova, "09:10");
+            parkingLot.park(innova, LocalTime.parse("19:18"));
+            parkingLot.park(innova, LocalTime.parse("04:18"));
         });
     }
 
     @Test
-    void givenCapacityIsFull_ShouldInformOwner() {
+    void givenCapacityIsFull_ShouldInformOwner() throws ParkingLotException {
         parkingLot.setMaxCapacity(4);
         parkingLot.registerObserver(owner);
         parkingLot.setMaxCapacity(4);
         Vehicle swift = new Vehicle("MP013344", "Swift");
         Vehicle alto = new Vehicle("MP023344", "Alto");
         Vehicle santro = new Vehicle("CG043344", "Santro");
-        try {
-            parkingLot.park(innova, "09:10");
-            parkingLot.park(swift, "09:10");
-            parkingLot.park(alto, "09:10");
-            parkingLot.park(santro, "09:10");
-            Assertions.assertTrue(owner.isAtMaxCapacity());
-        } catch (ParkingLotException e) {
-            Assertions.assertTrue(owner.isAtMaxCapacity());
-            Assertions.assertEquals("Parking lot is full", e.getMessage());
-        }
+        parkingLot.park(innova, LocalTime.parse("19:18"));
+        parkingLot.park(swift, LocalTime.parse("21:18"));
+        parkingLot.park(alto, LocalTime.parse("03:18"));
+        parkingLot.park(santro, LocalTime.parse("04:18"));
+        Assertions.assertTrue(owner.isAtMaxCapacity());
     }
 
     @Test
-    void givenCapacityIs2_ShouldBeAbleToPark2Vehicle() {
+    void givenCapacityIs2_ShouldBeAbleToPark2Vehicle() throws ParkingLotException {
         parkingLot.setMaxCapacity(2);
         Vehicle santro = new Vehicle("CG043344", "Santro");
         Vehicle swift = new Vehicle("MP013344", "Swift");
-        try {
-            parkingLot.park(swift, "09:10");
-            parkingLot.park(santro, "09:10");
-            Assertions.assertTrue(parkingLot.isVehicleParked(santro) && parkingLot.isVehicleParked(swift));
-        } catch (ParkingLotException e) {
-            Assertions.assertTrue(parkingLot.isVehicleParked(santro) && parkingLot.isVehicleParked(swift));
-            Assertions.assertEquals("Parking lot is full", e.getMessage());
-        }
+        parkingLot.park(swift, LocalTime.parse("05:18"));
+        parkingLot.park(santro, LocalTime.parse("09:48"));
+        Assertions.assertTrue(parkingLot.isVehicleParked(santro) && parkingLot.isVehicleParked(swift));
     }
 
     @Test
-    void givenCapacityIsFull_ShouldInformAirportSecurity() {
+    void givenCapacityIsFull_ShouldInformAirportSecurity() throws ParkingLotException {
         parkingLot.registerObserver(airportSecurity);
         parkingLot.setMaxCapacity(4);
         Vehicle swift = new Vehicle("MP013344", "Swift");
         Vehicle alto = new Vehicle("MP023344", "Alto");
         Vehicle santro = new Vehicle("CG043344", "Santro");
-        try {
-            parkingLot.park(innova, "09:10");
-            parkingLot.park(swift, "09:10");
-            parkingLot.park(alto, "09:10");
-            parkingLot.park(santro, "09:10");
-            Assertions.assertTrue(owner.isAtMaxCapacity());
-        } catch (ParkingLotException e) {
-            Assertions.assertTrue(owner.isAtMaxCapacity());
-            Assertions.assertEquals("Parking lot is full", e.getMessage());
-        }
+        parkingLot.park(innova, LocalTime.parse("09:18"));
+        parkingLot.park(swift, LocalTime.parse("09:18"));
+        parkingLot.park(alto, LocalTime.parse("09:18"));
+        parkingLot.park(santro, LocalTime.parse("09:18"));
+        Assertions.assertTrue(owner.isAtMaxCapacity());
     }
 
     @Test
-    void givenWhenParkingLotHasSpace_ShouldInformOwner() {
+    void givenWhenParkingLotHasSpace_ShouldInformOwner() throws ParkingLotException {
         parkingLot.registerObserver(owner);
         parkingLot.setMaxCapacity(4);
         Vehicle swift = new Vehicle("MP013344", "Swift");
         Vehicle alto = new Vehicle("MP023344", "Alto");
         Vehicle santro = new Vehicle("CG043344", "Santro");
-        try {
-            parkingLot.park(innova, "09:10");
-            parkingLot.park(swift, "09:10");
-            parkingLot.park(alto, "09:10");
-            parkingLot.park(santro, "09:10");
-            Assertions.assertTrue(owner.isAtMaxCapacity());
-            parkingLot.unPark(alto);
-            Assertions.assertFalse(owner.isAtMaxCapacity());
-        } catch (ParkingLotException e) {
-            Assertions.assertFalse(owner.isAtMaxCapacity());
-            Assertions.assertEquals("Parking lot is full", e.getMessage());
-        }
+        parkingLot.park(innova, LocalTime.parse("09:18"));
+        parkingLot.park(swift, LocalTime.parse("09:18"));
+        parkingLot.park(alto, LocalTime.parse("09:18"));
+        parkingLot.park(santro, LocalTime.parse("09:18"));
+        Assertions.assertTrue(owner.isAtMaxCapacity());
+        parkingLot.unPark(alto);
+        Assertions.assertFalse(owner.isAtMaxCapacity());
     }
 
     @Test
-    void givenAVehicle_whenParked_ShouldReturnParkingPosition() {
+    void givenAVehicle_whenParked_ShouldReturnParkingPosition() throws ParkingLotException {
         Vehicle swift = new Vehicle("MP013344", "Swift");
         Vehicle alto = new Vehicle("MP023344", "Alto");
         Vehicle santro = new Vehicle("CG043344", "Santro");
-        try {
-            parkingLot.park(swift, "09:10");
-            parkingLot.park(innova, "09:10");
-            parkingLot.park(alto, "09:10");
-            parkingLot.unPark((innova));
-            parkingLot.park(santro, "09:10");
-            parkingLot.park(innova, "09:10");
-            Assertions.assertEquals(1, parkingLot.getVehiclePosition(swift));
-            Assertions.assertEquals(3, parkingLot.getVehiclePosition(alto));
-        } catch (ParkingLotException e) {
-            Assertions.assertEquals(4, parkingLot.getVehiclePosition(innova));
-            Assertions.assertEquals(2, parkingLot.getVehiclePosition(santro));
-        }
+        parkingLot.park(swift, LocalTime.parse("09:18"));
+        parkingLot.park(innova, LocalTime.parse("09:18"));
+        parkingLot.park(alto, LocalTime.parse("09:18"));
+        parkingLot.unPark((innova));
+        parkingLot.park(santro, LocalTime.parse("09:18"));
+        parkingLot.park(innova, LocalTime.parse("09:18"));
+        Assertions.assertEquals(3, parkingLot.getVehiclePosition(swift));
+        Assertions.assertEquals(1, parkingLot.getVehiclePosition(alto));
     }
 
     @Test
-    void givenAVehicle_ifRequired_ShouldReturnTimeStamp() {
-        try {
-            parkingLot.park(innova, "09:10");
-            Assertions.assertEquals("09:10", parkingLot.getTimeStamp(innova));
-        } catch (ParkingLotException e) {
-            e.printStackTrace();
-        }
+    void givenAVehicle_ifRequired_ShouldReturnTimeStamp() throws ParkingLotException {
+        parkingLot.park(innova, LocalTime.parse("22:32"));
+        Assertions.assertEquals("22:32", parkingLot.getTimeStamp(innova));
     }
 
     @Test
-    void givenAHandicappedDriver_ifPossible_ShouldBeGivenFirstSlot() {
-        try {
-            parkingLot.setHandicapped(true);
-            parkingLot.park(innova, "09:10");
-            Assertions.assertEquals(0, parkingLot.getVehiclePosition(innova));
-        } catch (ParkingLotException e) {
-            e.printStackTrace();
-        }
+    void givenAHandicappedDriver_ifPossible_ShouldBeGivenFirstSlot() throws ParkingLotException {
+        Vehicle santro = new Vehicle("CG06A9722", "Santro", true);
+        parkingLot.park(innova, LocalTime.parse("09:18"));
+        parkingLot.park(santro, LocalTime.parse("09:18"));
+        Assertions.assertEquals(3, parkingLot.getVehiclePosition(innova));
+        Assertions.assertEquals(0, parkingLot.getVehiclePosition(santro));
     }
 }

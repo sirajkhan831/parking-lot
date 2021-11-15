@@ -1,5 +1,7 @@
 package com.bridgelabz;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +18,6 @@ public class ParkingLot {
     private ParkingLotOwner owner;
     private AirportSecurity airportSecurity;
     private final int maxCapacity;
-    private boolean isHandicapped;
     private final HashMap<Integer, Vehicle> vehicles = new HashMap<>();
     private final HashMap<Integer, String> vehicleTimeStamp = new HashMap<>();
 
@@ -37,23 +38,27 @@ public class ParkingLot {
      *
      * @param vehicle -> Required to park the given vehicle.
      */
-    public void park(Vehicle vehicle, String timeStamp) throws ParkingLotException {
+    public void park(Vehicle vehicle, LocalTime time) throws ParkingLotException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String timeStamp = formatter.format(time);
         if (isVehicleParked(vehicle)) {
-            throw new ParkingLotException("Already parked");
+            throw new ParkingLotException("Vehicle already parked");
         }
-        if (isHandicapped) {
-            if (vehicles.get(0) == null) {
-                vehicles.put(0, vehicle);
-                vehicleTimeStamp.put(0, timeStamp);
-            } else {
-                isHandicapped = false;
+        if (vehicle.isDriverHandicapped()) {
+            for (int i = 0; i < vehicles.size(); i++) {
+                if (vehicles.get(i) == null) {
+                    vehicles.put(i, vehicle);
+                    vehicleTimeStamp.put(i, timeStamp);
+                    break;
+                }
             }
-        }
-        for (int i = 1; i < vehicles.size(); i++) {
-            if (vehicles.get(i) == null) {
-                vehicles.put(i, vehicle);
-                vehicleTimeStamp.put(i, timeStamp);
-                break;
+        } else {
+            for (int i = vehicles.size() - 1; i >= 0; i--) {
+                if (vehicles.get(i) == null) {
+                    vehicles.put(i, vehicle);
+                    vehicleTimeStamp.put(i, timeStamp);
+                    break;
+                }
             }
         }
         if (vehicles.size() == maxCapacity) {
@@ -69,13 +74,12 @@ public class ParkingLot {
      *
      * @param vehicle -> Required to un-park the given vehicle.
      */
-    public void unPark(Vehicle vehicle) {
+    public void unPark(Vehicle vehicle) throws ParkingLotException {
         capacityFull(false);
-        for (Map.Entry<Integer, Vehicle> entry : vehicles.entrySet()) {
-            if (entry.getValue() != null && entry.getValue().equals(vehicle)) {
-                vehicles.put(entry.getKey(), null);
-                vehicleTimeStamp.put(entry.getKey(), null);
-            }
+        if (isVehicleParked(vehicle)) {
+            vehicles.put(getVehiclePosition(vehicle), null);
+        } else {
+            throw new ParkingLotException("Vehicle not parked");
         }
     }
 
@@ -147,9 +151,5 @@ public class ParkingLot {
      */
     public String getTimeStamp(Vehicle vehicle) {
         return vehicleTimeStamp.get(getVehiclePosition(vehicle));
-    }
-
-    public void setHandicapped(boolean handicapped) {
-        isHandicapped = handicapped;
     }
 }
