@@ -1,10 +1,14 @@
 package com.bridgelabz;
 
-/**
- * @author -> Siraj
- * @version -> 0.1
- * @since -> 12/11/2021
- */
+/******************************************************************************
+ *
+ *  Purpose: Parking lot owner class used to give owner's lot updates.
+ *
+ *  @author Siraj
+ *  @version 1.0
+ *  @since 13-11-2021
+ *
+ ******************************************************************************/
 public class ParkingLotOwner implements Observer {
     private boolean isAtMaxCapacity;
 

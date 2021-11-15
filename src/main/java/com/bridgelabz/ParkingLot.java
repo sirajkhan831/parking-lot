@@ -5,22 +5,31 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author -> Siraj
- * @version -> 0.1
- * @since -> 10/11/2021
- */
+/******************************************************************************
+ *
+ *  Purpose: Parking lot program which ensures parking position, capacity, etc.
+ *
+ *  @author Siraj
+ *  @version 1.0
+ *  @since 10-11-2021
+ *
+ ******************************************************************************/
+
 public class ParkingLot {
 
-    /**
-     * This program manages parking spaces for vehicles.
-     */
     private ParkingLotOwner owner;
     private AirportSecurity airportSecurity;
     private final int maxCapacity;
     private final HashMap<Integer, Vehicle> vehicles = new HashMap<>();
     private final HashMap<Integer, String> vehicleTimeStamp = new HashMap<>();
 
+    /**
+     * Purpose: Default Constructor to initialize maxCapacity, owner & security
+     *
+     * @param maxCapacity:     Takes int and sets max capacity of the lot.
+     * @param owner:           Sets the owner of the lot.
+     * @param airportSecurity: Sets the airport security head of the lot.
+     **/
     public ParkingLot(int maxCapacity, ParkingLotOwner owner, AirportSecurity airportSecurity) {
         this.maxCapacity = setMaxCapacity(maxCapacity);
         this.owner = owner;
@@ -34,9 +43,10 @@ public class ParkingLot {
     }
 
     /**
-     * Purpose -> This method parks a vehicle in the parking lot.
+     * Purpose: This method parks a vehicle in the parking lot.
      *
-     * @param vehicle -> Required to park the given vehicle.
+     * @param vehicle: Takes Vehicle object and parks the given vehicle.
+     * @param time:    Takes LocalTime and sets the parking time of vehicle.
      */
     public void park(Vehicle vehicle, LocalTime time) throws ParkingLotException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -70,9 +80,9 @@ public class ParkingLot {
     }
 
     /**
-     * Purpose -> This method un-parks an already parked vehicle
+     * Purpose: Used to un-parks an already parked vehicle
      *
-     * @param vehicle -> Required to un-park the given vehicle.
+     * @param vehicle: Takes Vehicle object and un-parks the given vehicle.
      */
     public void unPark(Vehicle vehicle) throws ParkingLotException {
         capacityFull(false);
@@ -84,46 +94,9 @@ public class ParkingLot {
     }
 
     /**
-     * Purpose -> This method registers the owner for the parking lot
+     * Purpose: Used to inform the owner and airport security about lot's max capacity.
      *
-     * @param owner -> Required to set the owner
-     */
-    public void registerObserver(ParkingLotOwner owner) {
-        this.owner = owner;
-    }
-
-    /**
-     * Purpose -> This method registers the airport security for the parking lot
-     *
-     * @param airportSecurity -> Required to set the airport security
-     */
-    public void registerObserver(AirportSecurity airportSecurity) {
-        this.airportSecurity = airportSecurity;
-    }
-
-    /**
-     * Purpose -> This method checks if the given vehicle is parked or not.
-     *
-     * @param vehicle -> Required to get the current status of the given vehicle.
-     * @return -> Return true if the vehicle is parked
-     */
-    public boolean isVehicleParked(Vehicle vehicle) {
-        return vehicles.containsValue(vehicle);
-    }
-
-    /**
-     * Purpose -> This method sets the max capacity of the parking lot.
-     *
-     * @param maxCapacity -> Required to set the max capacity of the parking lot.
-     */
-    public int setMaxCapacity(int maxCapacity) {
-        return maxCapacity;
-    }
-
-    /**
-     * Purpose -> This method informs the owner and airport security about lot's current capacity.
-     *
-     * @param capacityCheck -> If true sets lot at max capacity
+     * @param capacityCheck: If true sets lot at max capacity
      */
     public void capacityFull(boolean capacityCheck) {
         owner.capacityFull(capacityCheck);
@@ -131,10 +104,47 @@ public class ParkingLot {
     }
 
     /**
-     * Purpose -> This method is used to locate the vehicle in the lot.
+     * Purpose: Determines weather the given vehicle is parked or not.
      *
-     * @param vehicle -> Required to check the given vehicle position
-     * @return -> Returns vehicle position
+     * @param vehicle: Takes Vehicle object and checks the given vehicle.
+     * @return : Returns true if the vehicle is parked
+     */
+    public boolean isVehicleParked(Vehicle vehicle) {
+        return vehicles.containsValue(vehicle);
+    }
+
+    /**
+     * Purpose: Used to sets the max capacity of the parking lot.
+     *
+     * @param maxCapacity: Required to set the max capacity of the parking lot.
+     */
+    public int setMaxCapacity(int maxCapacity) {
+        return maxCapacity;
+    }
+
+    /**
+     * Purpose: Used registers the owner for the parking lot
+     *
+     * @param owner: Required to set the owner
+     */
+    public void registerObserver(ParkingLotOwner owner) {
+        this.owner = owner;
+    }
+
+    /**
+     * Purpose: Used to registers the airport security for the parking lot
+     *
+     * @param airportSecurity: Required to set the airport security
+     */
+    public void registerObserver(AirportSecurity airportSecurity) {
+        this.airportSecurity = airportSecurity;
+    }
+
+    /**
+     * Purpose: Used is used to locate the vehicle in the lot.
+     *
+     * @param vehicle: Required to check the given vehicle position
+     * @return : Returns vehicle position
      */
     public int getVehiclePosition(Vehicle vehicle) {
         for (Map.Entry<Integer, Vehicle> entry : vehicles.entrySet()) {
@@ -146,10 +156,12 @@ public class ParkingLot {
     }
 
     /**
-     * @param vehicle -> Required to check the given vehicle position
-     * @return -> Returns vehicle timestamp
+     * @param vehicle: Required to check the given vehicle position
+     * @return : Returns vehicle timestamp
      */
     public String getTimeStamp(Vehicle vehicle) {
         return vehicleTimeStamp.get(getVehiclePosition(vehicle));
     }
 }
+
+
