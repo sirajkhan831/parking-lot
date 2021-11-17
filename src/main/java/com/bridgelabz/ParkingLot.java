@@ -1,6 +1,6 @@
 package com.bridgelabz;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,8 +48,8 @@ public class ParkingLot {
      * @param vehicle: Takes Vehicle object and parks the given vehicle.
      * @param time:    Takes LocalTime and sets the parking time of vehicle.
      */
-    public void park(Vehicle vehicle, LocalTime time) throws ParkingLotException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+    public void park(Vehicle vehicle, LocalDateTime time) throws ParkingLotException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
         String timeStamp = formatter.format(time);
         if (isVehicleParked(vehicle)) {
             throw new ParkingLotException("Vehicle already parked");
