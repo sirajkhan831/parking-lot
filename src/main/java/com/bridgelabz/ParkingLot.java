@@ -15,7 +15,7 @@ import java.util.Map;
  *
  ******************************************************************************/
 
-public class ParkingLot {
+public class ParkingLot implements Comparable<ParkingLot> {
 
     private ParkingLotOwner owner;
     private AirportSecurity airportSecurity;
@@ -169,6 +169,29 @@ public class ParkingLot {
      */
     public String getTimeStamp(Vehicle vehicle) {
         return vehicleTimeStamp.get(getVehiclePosition(vehicle));
+    }
+
+    public int getTotalVehicle() {
+        int currentVehicle = 0;
+        for (Map.Entry<Integer, Vehicle> entry : vehicles.entrySet()) {
+            if (entry.getValue() != null) {
+                currentVehicle++;
+            }
+        }
+        return currentVehicle;
+    }
+
+    @Override
+    public int compareTo(ParkingLot that) {
+        return this.getTotalVehicle() - that.getTotalVehicle();
+    }
+
+    public ParkingLotOwner getOwner() {
+        return owner;
+    }
+
+    public AirportSecurity getAirportSecurity() {
+        return airportSecurity;
     }
 }
 
