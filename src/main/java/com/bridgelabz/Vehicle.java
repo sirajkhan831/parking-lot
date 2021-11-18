@@ -14,6 +14,7 @@ public class Vehicle {
     private final String vehicleName;
     private boolean isDriverHandicapped;
     private Size vehicleSize;
+    private String colour;
 
     enum Size {LARGE, SMALL}
 
@@ -23,9 +24,10 @@ public class Vehicle {
      * @param vehicleNumber : vehicle number used to store vehicle's unique number
      * @param vehicleName   : vehicle name used for vehicle's name.
      */
-    public Vehicle(String vehicleNumber, String vehicleName) {
+    public Vehicle(String vehicleNumber, String vehicleName, String colour) {
         this.vehicleNumber = vehicleNumber;
         this.vehicleName = vehicleName;
+        this.colour = colour;
     }
 
     /**
@@ -56,5 +58,9 @@ public class Vehicle {
 
     public String getVehicleName() {
         return vehicleName;
+    }
+
+    public String getColour() {
+        return this.colour;
     }
 }

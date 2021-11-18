@@ -46,9 +46,6 @@ public class ParkingLot implements Comparable<ParkingLot> {
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
         String timeStamp = formatter.format(time);
-        if (isVehicleParked(vehicle)) {
-            throw new ParkingLotException("Vehicle already parked");
-        }
         if (vehicle.isDriverHandicapped()) {
             for (int i = 0; i < vehicles.size(); i++) {
                 if (vehicles.get(i) == null) {
@@ -192,6 +189,10 @@ public class ParkingLot implements Comparable<ParkingLot> {
 
     public AirportSecurity getAirportSecurity() {
         return airportSecurity;
+    }
+
+    public HashMap<Integer, Vehicle> getVehicles() {
+        return vehicles;
     }
 }
 

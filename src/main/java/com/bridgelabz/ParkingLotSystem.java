@@ -34,6 +34,9 @@ public class ParkingLotSystem {
         }
         if (!singleLotParking) {
             Collections.sort(lots);
+            if (vehicle.getVehicleSize() != Vehicle.Size.LARGE) {
+                Collections.reverse(lots);
+            }
         }
         lots.get(0).park(vehicle, time);
         vehicleLot.put(vehicle, lots.get(0));
@@ -54,5 +57,9 @@ public class ParkingLotSystem {
 
     public void singleLotParking() {
         this.singleLotParking = true;
+    }
+
+    public HashMap<Vehicle, ParkingLot> getVehicleLot() {
+        return vehicleLot;
     }
 }
