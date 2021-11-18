@@ -19,27 +19,19 @@ public class ParkingLot {
 
     private ParkingLotOwner owner;
     private AirportSecurity airportSecurity;
-    private final int maxCapacity;
     private final HashMap<Integer, Vehicle> vehicles = new HashMap<>();
     private final HashMap<Integer, String> vehicleTimeStamp = new HashMap<>();
 
     /**
      * Purpose: Default Constructor to initialize maxCapacity, owner & security
      *
-     * @param maxCapacity:     Takes int and sets max capacity of the lot.
      * @param owner:           Sets the owner of the lot.
      * @param airportSecurity: Sets the airport security head of the lot.
      **/
     public ParkingLot(int maxCapacity, ParkingLotOwner owner, AirportSecurity airportSecurity) {
-        this.maxCapacity = setMaxCapacity(maxCapacity);
         this.owner = owner;
         this.airportSecurity = airportSecurity;
-        int index = 0;
-        for (int i = 0; i < this.maxCapacity; i++) {
-            vehicles.put(index, null);
-            vehicleTimeStamp.put(index, null);
-            index++;
-        }
+        setMaxCapacity(maxCapacity);
     }
 
     /**
@@ -49,6 +41,9 @@ public class ParkingLot {
      * @param time:    Takes LocalTime and sets the parking time of vehicle.
      */
     public void park(Vehicle vehicle, LocalDateTime time) throws ParkingLotException {
+        if (isAtMaxCapacity()) {
+            throw new ParkingLotException("Parking already full");
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
         String timeStamp = formatter.format(time);
         if (isVehicleParked(vehicle)) {
@@ -71,12 +66,7 @@ public class ParkingLot {
                 }
             }
         }
-        if (vehicles.size() == maxCapacity) {
-            capacityFull(true);
-        }
-        if (vehicles.size() > maxCapacity) {
-            throw new ParkingLotException("Parking lot is full");
-        }
+        isAtMaxCapacity();
     }
 
     /**
@@ -85,9 +75,9 @@ public class ParkingLot {
      * @param vehicle: Takes Vehicle object and un-parks the given vehicle.
      */
     public void unPark(Vehicle vehicle) throws ParkingLotException {
-        capacityFull(false);
         if (isVehicleParked(vehicle)) {
             vehicles.put(getVehiclePosition(vehicle), null);
+            isAtMaxCapacity();
         } else {
             throw new ParkingLotException("Vehicle not parked");
         }
@@ -95,12 +85,24 @@ public class ParkingLot {
 
     /**
      * Purpose: Used to inform the owner and airport security about lot's max capacity.
-     *
-     * @param capacityCheck: If true sets lot at max capacity
      */
-    public void capacityFull(boolean capacityCheck) {
-        owner.capacityFull(capacityCheck);
-        airportSecurity.capacityFull(capacityCheck);
+    public boolean isAtMaxCapacity() {
+        boolean hasSpace = false;
+        for (Map.Entry<Integer, Vehicle> entry : vehicles.entrySet()) {
+            if (entry.getValue() == null) {
+                hasSpace = true;
+                break;
+            }
+        }
+        if (hasSpace) {
+            owner.capacityFull(false);
+            airportSecurity.capacityFull(false);
+            return false;
+        } else {
+            owner.capacityFull(true);
+            airportSecurity.capacityFull(true);
+            return true;
+        }
     }
 
     /**
@@ -116,10 +118,16 @@ public class ParkingLot {
     /**
      * Purpose: Used to sets the max capacity of the parking lot.
      *
-     * @param maxCapacity: Required to set the max capacity of the parking lot.
+     * @param maxCapacity : Required to set the max capacity of the parking lot.
      */
-    public int setMaxCapacity(int maxCapacity) {
-        return maxCapacity;
+    public void setMaxCapacity(int maxCapacity) {
+        vehicles.clear();
+        int index = 0;
+        for (int i = 0; i < maxCapacity; i++) {
+            vehicles.put(index, null);
+            vehicleTimeStamp.put(index, null);
+            index++;
+        }
     }
 
     /**

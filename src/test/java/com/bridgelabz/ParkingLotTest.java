@@ -13,7 +13,6 @@ public class ParkingLotTest {
     Vehicle innova = null;
     AirportSecurity airportSecurity = null;
     DateTimeFormatter formatter;
-
     @BeforeEach
     void setUp() {
         owner = new ParkingLotOwner();
@@ -21,11 +20,12 @@ public class ParkingLotTest {
         innova = new Vehicle("KA012311", "Innova");
         parkingLot = new ParkingLot(4, owner, airportSecurity);
         formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
+        parkingLot.setMaxCapacity(4);
     }
 
     @Test
     void givenAVehicle_ifParked_ShouldReturnTrue() throws ParkingLotException {
-        parkingLot.park(innova, LocalDateTime.parse("17/11/2021-14:50"));
+        parkingLot.park(innova, LocalDateTime.parse("17/11/2021-14:50", formatter));
         boolean isParked = parkingLot.isVehicleParked(innova);
         Assertions.assertTrue(isParked);
     }
@@ -123,7 +123,7 @@ public class ParkingLotTest {
 
     @Test
     void givenAHandicappedDriver_ifPossible_ShouldBeGivenFirstSlot() throws ParkingLotException {
-        Vehicle santro = new Vehicle("CG06A9722", "Santro", true);
+        Vehicle santro = new Vehicle("CG06A9722", "Santro", Vehicle.Size.LARGE, true);
         parkingLot.park(innova, LocalDateTime.parse("17/11/2021-17:49", formatter));
         parkingLot.park(santro, LocalDateTime.parse("17/11/2021-12:49", formatter));
         Assertions.assertEquals(3, parkingLot.getVehiclePosition(innova));
