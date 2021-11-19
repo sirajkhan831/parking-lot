@@ -9,12 +9,17 @@ package com.bridgelabz;
  *  @since 11-11-2021
  *
  ******************************************************************************/
-public class Vehicle {
+public class Vehicle implements Comparable<Vehicle> {
     private final String vehicleNumber;
     private final String vehicleName;
     private boolean isDriverHandicapped;
-    private Size vehicleSize;
+    private final Size vehicleSize;
     private String colour;
+
+    @Override
+    public int compareTo(Vehicle that) {
+        return this.getVehicleName().compareTo(that.getVehicleName());
+    }
 
     enum Size {LARGE, SMALL}
 
@@ -24,10 +29,11 @@ public class Vehicle {
      * @param vehicleNumber : vehicle number used to store vehicle's unique number
      * @param vehicleName   : vehicle name used for vehicle's name.
      */
-    public Vehicle(String vehicleNumber, String vehicleName, String colour) {
+    public Vehicle(String vehicleNumber, String vehicleName, String colour, Size vehicleSize) {
         this.vehicleNumber = vehicleNumber;
         this.vehicleName = vehicleName;
         this.colour = colour;
+        this.vehicleSize = vehicleSize;
     }
 
     /**

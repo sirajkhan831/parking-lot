@@ -2,6 +2,8 @@ package com.bridgelabz;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,10 +19,10 @@ import java.util.Map;
 
 public class ParkingLot implements Comparable<ParkingLot> {
 
-    private ParkingLotOwner owner;
-    private AirportSecurity airportSecurity;
+    private final ParkingLotOwner owner;
+    private final AirportSecurity airportSecurity;
     private final HashMap<Integer, Vehicle> vehicles = new HashMap<>();
-    private final HashMap<Integer, String> vehicleTimeStamp = new HashMap<>();
+    private final HashMap<Vehicle, LocalDateTime> vehicleTimeStamp = new HashMap<>();
 
     /**
      * Purpose: Default Constructor to initialize maxCapacity, owner & security
@@ -39,18 +41,17 @@ public class ParkingLot implements Comparable<ParkingLot> {
      *
      * @param vehicle: Takes Vehicle object and parks the given vehicle.
      * @param time:    Takes LocalTime and sets the parking time of vehicle.
+     * @throws ParkingLotException : Custom exception for invalid parking.
      */
     public void park(Vehicle vehicle, LocalDateTime time) throws ParkingLotException {
         if (isAtMaxCapacity()) {
             throw new ParkingLotException("Parking already full");
         }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
-        String timeStamp = formatter.format(time);
         if (vehicle.isDriverHandicapped()) {
             for (int i = 0; i < vehicles.size(); i++) {
                 if (vehicles.get(i) == null) {
                     vehicles.put(i, vehicle);
-                    vehicleTimeStamp.put(i, timeStamp);
+                    vehicleTimeStamp.put(vehicle, time);
                     break;
                 }
             }
@@ -58,7 +59,7 @@ public class ParkingLot implements Comparable<ParkingLot> {
             for (int i = vehicles.size() - 1; i >= 0; i--) {
                 if (vehicles.get(i) == null) {
                     vehicles.put(i, vehicle);
-                    vehicleTimeStamp.put(i, timeStamp);
+                    vehicleTimeStamp.put(vehicle, time);
                     break;
                 }
             }
@@ -122,27 +123,8 @@ public class ParkingLot implements Comparable<ParkingLot> {
         int index = 0;
         for (int i = 0; i < maxCapacity; i++) {
             vehicles.put(index, null);
-            vehicleTimeStamp.put(index, null);
             index++;
         }
-    }
-
-    /**
-     * Purpose: Used registers the owner for the parking lot
-     *
-     * @param owner: Required to set the owner
-     */
-    public void registerObserver(ParkingLotOwner owner) {
-        this.owner = owner;
-    }
-
-    /**
-     * Purpose: Used to registers the airport security for the parking lot
-     *
-     * @param airportSecurity: Required to set the airport security
-     */
-    public void registerObserver(AirportSecurity airportSecurity) {
-        this.airportSecurity = airportSecurity;
     }
 
     /**
@@ -161,13 +143,38 @@ public class ParkingLot implements Comparable<ParkingLot> {
     }
 
     /**
-     * @param vehicle: Required to check the given vehicle position
-     * @return : Returns vehicle timestamp
+     * Purpose : Method used to find the duration of parked vehicle in the lot.
+     *
+     * @param vehicle : Required to find the duration of given vehicle.
+     * @return : Returns time in minutes by comparing timestamp and static test time
      */
-    public String getTimeStamp(Vehicle vehicle) {
-        return vehicleTimeStamp.get(getVehiclePosition(vehicle));
+    public int getVehicleParkingDuration(Vehicle vehicle) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
+        return (int) ChronoUnit.MINUTES.between(getTimeStamp(vehicle), LocalDateTime.parse(("19/11/2021-21:55"), formatter));
     }
 
+    /**
+     * Purpose : Method used for finding all the vehicles parked within given time.
+     *
+     * @param durationInMinutes : Given time required to find all the vehicles.
+     * @return : Returns list of vehicle parked within given time.
+     */
+    public ArrayList<Vehicle> getVehiclesByDuration(int durationInMinutes) {
+        ArrayList<Vehicle> vehicleArrayList = new ArrayList<>();
+        for (Map.Entry<Vehicle, LocalDateTime> entry : vehicleTimeStamp.entrySet()) {
+            if (getVehicleParkingDuration(entry.getKey()) < durationInMinutes) {
+                vehicleArrayList.add(entry.getKey());
+            }
+        }
+        return vehicleArrayList;
+    }
+
+    /**
+     * Purpose : Method used to get total vehicles currently
+     * parked at the lot.
+     *
+     * @return : returns the number of vehicle parked at the lot.
+     */
     public int getTotalVehicle() {
         int currentVehicle = 0;
         for (Map.Entry<Integer, Vehicle> entry : vehicles.entrySet()) {
@@ -178,22 +185,44 @@ public class ParkingLot implements Comparable<ParkingLot> {
         return currentVehicle;
     }
 
+    /**
+     * Purpose : This method is used to compare two different parking lots
+     * by the number of vehicle parked.
+     *
+     * @param that : ParkingLot Object used to compare with current Lot
+     * @return : returns int value by comparing the two lots.
+     */
     @Override
     public int compareTo(ParkingLot that) {
         return this.getTotalVehicle() - that.getTotalVehicle();
     }
 
+    /**
+     * @param vehicle: Required to check the given vehicle position
+     * @return : Returns vehicle timestamp
+     */
+    public LocalDateTime getTimeStamp(Vehicle vehicle) {
+        return vehicleTimeStamp.get(vehicle);
+    }
+
+    /**
+     * Purpose : Getter method to get the owner for other classes.
+     *
+     * @return : Returns the owner of the current lot.
+     */
     public ParkingLotOwner getOwner() {
         return owner;
     }
 
+    /**
+     * Purpose : Getter method to get the airport security for other classes.
+     *
+     * @return : Returns the airport security of the current lot.
+     */
     public AirportSecurity getAirportSecurity() {
         return airportSecurity;
     }
 
-    public HashMap<Integer, Vehicle> getVehicles() {
-        return vehicles;
-    }
 }
 
 
