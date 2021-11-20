@@ -162,7 +162,7 @@ public class ParkingLot implements Comparable<ParkingLot> {
     public ArrayList<Vehicle> getVehiclesByDuration(int durationInMinutes) {
         ArrayList<Vehicle> vehicleArrayList = new ArrayList<>();
         for (Map.Entry<Vehicle, LocalDateTime> entry : vehicleTimeStamp.entrySet()) {
-            if (getVehicleParkingDuration(entry.getKey()) < durationInMinutes) {
+            if (getVehicleParkingDuration(entry.getKey()) <= durationInMinutes) {
                 vehicleArrayList.add(entry.getKey());
             }
         }
