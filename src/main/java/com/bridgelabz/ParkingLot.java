@@ -222,7 +222,6 @@ public class ParkingLot implements Comparable<ParkingLot> {
     public AirportSecurity getAirportSecurity() {
         return airportSecurity;
     }
-
 }
 
 

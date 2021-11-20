@@ -14,9 +14,10 @@ import java.util.*;
  ******************************************************************************/
 
 public class ParkingLotSystem {
-    private ParkingLot lot1;
-    private ParkingLot lot2;
-    private ParkingLot lot3;
+    private ParkingLot A;
+    private ParkingLot B;
+    private ParkingLot C;
+    private ParkingLot D;
     private boolean singleLotParking = false;
     private final ParkingLotOwner owner;
     private final AirportSecurity security;
@@ -34,9 +35,10 @@ public class ParkingLotSystem {
         this.owner = owner;
         this.security = airportSecurity;
         setMaxCapacity(maxCapacity);
-        parkingLots.add(lot1);
-        parkingLots.add(lot2);
-        parkingLots.add(lot3);
+        parkingLots.add(A);
+        parkingLots.add(B);
+        parkingLots.add(C);
+        parkingLots.add(D);
     }
 
     /**
@@ -45,9 +47,10 @@ public class ParkingLotSystem {
      * @param maxCapacity : Parameter for setting the maximum capacity of lots.
      */
     public void setMaxCapacity(int maxCapacity) {
-        lot1 = new ParkingLot(maxCapacity, owner, security);
-        lot2 = new ParkingLot(maxCapacity, owner, security);
-        lot3 = new ParkingLot(maxCapacity, owner, security);
+        A = new ParkingLot(maxCapacity, owner, security);
+        B = new ParkingLot(maxCapacity, owner, security);
+        C = new ParkingLot(maxCapacity, owner, security);
+        D = new ParkingLot(maxCapacity, owner, security);
     }
 
     /**

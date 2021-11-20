@@ -3,6 +3,8 @@ package com.bridgelabz;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /******************************************************************************
  *
@@ -15,6 +17,9 @@ import java.util.Map;
  ******************************************************************************/
 public class PoliceDepartment {
     private final ParkingLotSystem parkingLotSystem;
+    private String vehicleName = null;
+    private String vehicleColour = null;
+    private Vehicle.Size vehicleSize = null;
 
     /**
      * Purpose : Default constructor to initialize the parameters.
@@ -26,20 +31,45 @@ public class PoliceDepartment {
     }
 
     /**
+     * Purpose : Iterates vehicle hashmap for other methods.
+     *
+     * @return : Returns list of vehicle which matches.
+     */
+    private ArrayList<Vehicle> entrySet() {
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
+        for (Map.Entry<Vehicle, ParkingLot> entry : parkingLotSystem.getVehicleLotMap().entrySet()) {
+            if (vehicleName != null && vehicleColour == null) {
+                if (vehicleName.equals(entry.getKey().getVehicleName())) {
+                    vehicles.add(entry.getKey());
+                }
+            }
+            if (vehicleColour != null && vehicleName == null) {
+                if (vehicleColour.equals(entry.getKey().getColour())) {
+                    vehicles.add(entry.getKey());
+                }
+            }
+            if (vehicleName != null && vehicleColour != null) {
+                if (vehicleName.equals(entry.getKey().getVehicleName()) && vehicleColour.equals(entry.getKey().getColour())) {
+                    vehicles.add(entry.getKey());
+                }
+            }
+            if (this.vehicleSize != null && this.vehicleSize.equals(entry.getKey().getVehicleSize())) {
+                vehicles.add(entry.getKey());
+            }
+        }
+        Collections.sort(vehicles);
+        return vehicles;
+    }
+
+    /**
      * Purpose : Used to find the list of vehicles by given colour
      *
      * @param vehicleColour : All vehicles are checked for this colour
      * @return : Returns list of vehicle which matches the given scenario.
      */
     public ArrayList<Vehicle> getVehicleByColour(String vehicleColour) {
-        ArrayList<Vehicle> vehicleList = new ArrayList<>();
-        for (Map.Entry<Vehicle, ParkingLot> entry : parkingLotSystem.getVehicleLotMap().entrySet()) {
-            if (entry.getKey().getColour().equals(vehicleColour)) {
-                vehicleList.add(entry.getKey());
-            }
-        }
-        Collections.sort(vehicleList);
-        return vehicleList;
+        this.vehicleColour = vehicleColour;
+        return entrySet();
     }
 
     /**
@@ -49,14 +79,8 @@ public class PoliceDepartment {
      * @return : Returns list of vehicle which matches the given scenario.
      */
     public ArrayList<Vehicle> getVehicleByName(String vehicleName) {
-        ArrayList<Vehicle> vehicleList = new ArrayList<>();
-        for (Map.Entry<Vehicle, ParkingLot> entry : parkingLotSystem.getVehicleLotMap().entrySet()) {
-            if (entry.getKey().getVehicleName().equals(vehicleName)) {
-                vehicleList.add(entry.getKey());
-            }
-        }
-        Collections.sort(vehicleList);
-        return vehicleList;
+        this.vehicleName = vehicleName;
+        return entrySet();
     }
 
     /**
@@ -73,6 +97,17 @@ public class PoliceDepartment {
     }
 
     /**
+     * Purpose : Used to find the list of vehicles by given size
+     *
+     * @param size : All vehicles are checked for this size
+     * @return : Returns list of vehicle which matches the given scenario.
+     */
+    public ArrayList<Vehicle> getVehicleBySize(Vehicle.Size size) {
+        this.vehicleSize = size;
+        return entrySet();
+    }
+
+    /**
      * Purpose : Used to find the list of vehicles parked within given duration
      *
      * @param durationInMinutes : Duration required to check for vehicles parked within this time.
@@ -85,5 +120,17 @@ public class PoliceDepartment {
         }
         Collections.sort(vehicles);
         return vehicles;
+    }
+
+    /**
+     * Purpose : Used to find if the given vehicle has fraudulent number plate.
+     *
+     * @param vehicle : Given Vehicle will be used to check the number
+     * @return : Returns false if the number is fraudulent.
+     */
+    public boolean validateVehicleNumber(Vehicle vehicle) {
+        Pattern pattern = Pattern.compile("^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$");
+        Matcher matcher = pattern.matcher(vehicle.getVehicleNumber());
+        return matcher.matches();
     }
 }

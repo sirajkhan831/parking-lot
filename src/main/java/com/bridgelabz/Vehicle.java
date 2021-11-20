@@ -14,14 +14,9 @@ public class Vehicle implements Comparable<Vehicle> {
     private final String vehicleName;
     private boolean isDriverHandicapped;
     private final Size vehicleSize;
-    private String colour;
+    private final String colour;
 
-    @Override
-    public int compareTo(Vehicle that) {
-        return this.getVehicleName().compareTo(that.getVehicleName());
-    }
-
-    enum Size {LARGE, SMALL}
+    enum Size {LARGE, SMALL;}
 
     /**
      * Purpose: Default Constructor to initialize vehicle name & name.
@@ -41,13 +36,15 @@ public class Vehicle implements Comparable<Vehicle> {
      *
      * @param vehicleNumber       : vehicle number used to store vehicle's unique number
      * @param vehicleName         : vehicle name used for vehicle's name.
+     * @param vehicleColour       : vehicle vehicleColour used to determine vehicleColour of vehicle.
      * @param isDriverHandicapped : Used by handicapped drivers for highest priority in lot.
      */
-    public Vehicle(String vehicleNumber, String vehicleName, Size vehicleSize, boolean isDriverHandicapped) {
+    public Vehicle(String vehicleNumber, String vehicleName, String vehicleColour, Size vehicleSize, boolean isDriverHandicapped) {
         this.vehicleNumber = vehicleNumber;
         this.vehicleName = vehicleName;
-        this.isDriverHandicapped = isDriverHandicapped;
+        this.colour = vehicleColour;
         this.vehicleSize = vehicleSize;
+        this.isDriverHandicapped = isDriverHandicapped;
     }
 
     public Size getVehicleSize() {
@@ -68,5 +65,10 @@ public class Vehicle implements Comparable<Vehicle> {
 
     public String getColour() {
         return this.colour;
+    }
+
+    @Override
+    public int compareTo(Vehicle that) {
+        return this.getVehicleName().compareTo(that.getVehicleName());
     }
 }

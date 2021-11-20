@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ParkingLotTest {
@@ -125,7 +126,7 @@ public class ParkingLotTest {
 
     @Test
     void givenAHandicappedDriver_ifPossible_ShouldBeGivenFirstSlot() throws ParkingLotException {
-        Vehicle santro = new Vehicle("CG06A9722", "Santro", Vehicle.Size.LARGE, true);
+        Vehicle santro = new Vehicle("CG06A9722", "Santro", "WHITE", Vehicle.Size.SMALL, true);
         parkingSystem.park(bmw, LocalDateTime.parse("17/11/2021-17:49", formatter));
         parkingSystem.park(santro, LocalDateTime.parse("17/11/2021-12:49", formatter));
         Assertions.assertEquals(3, parkingSystem.getLot(bmw).getVehiclePosition(bmw));
@@ -187,5 +188,29 @@ public class ParkingLotTest {
         parkingSystem.park(swift, LocalDateTime.parse("19/11/2021-21:01", formatter));
         parkingSystem.park(alto, LocalDateTime.parse("19/11/2021-21:01", formatter));
         Assertions.assertEquals(List.of(toyota), police.getVehicleByDuration(10));
+    }
+
+    @Test
+    void givenVehicleSizeAndDriver_ifRequiredListOfVehicle_ShouldReturnEqual() throws ParkingLotException {
+        Vehicle toyota = new Vehicle("DL12RE3387", "toyota", "BLUE", Vehicle.Size.LARGE);
+        Vehicle swift = new Vehicle("MP01PO3344", "Swift", "WHITE", Vehicle.Size.SMALL);
+        Vehicle alto = new Vehicle("MP02JK3344", "Alto", "WHITE", Vehicle.Size.SMALL, true);
+        parkingSystem.park(toyota, LocalDateTime.parse("19/11/2021-21:55", formatter));
+        parkingSystem.park(swift, LocalDateTime.parse("19/11/2021-21:01", formatter));
+        parkingSystem.park(alto, LocalDateTime.parse("19/11/2021-21:01", formatter));
+        ArrayList<Vehicle> vehicles = police.getVehicleBySize(Vehicle.Size.SMALL);
+        vehicles.removeIf(vehicle -> !vehicle.isDriverHandicapped());
+        Assertions.assertEquals(List.of(alto), vehicles);
+    }
+
+    @Test
+    void givenVehicleNumber_ifFraudulent_ShouldReturnFalse() throws ParkingLotException {
+        Vehicle toyota = new Vehicle("DL12RE3387", "toyota", "BLUE", Vehicle.Size.LARGE);
+        Vehicle swift = new Vehicle("M201PO3344", "Swift", "WHITE", Vehicle.Size.SMALL);
+        Vehicle alto = new Vehicle("MP02JK3344", "Alto", "WHITE", Vehicle.Size.SMALL, true);
+        parkingSystem.park(toyota, LocalDateTime.parse("19/11/2021-21:55", formatter));
+        parkingSystem.park(swift, LocalDateTime.parse("19/11/2021-21:01", formatter));
+        parkingSystem.park(alto, LocalDateTime.parse("19/11/2021-21:01", formatter));
+        Assertions.assertFalse(police.validateVehicleNumber(swift));
     }
 }
