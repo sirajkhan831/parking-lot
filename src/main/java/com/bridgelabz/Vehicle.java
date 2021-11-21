@@ -16,7 +16,7 @@ public class Vehicle implements Comparable<Vehicle> {
     private final Size vehicleSize;
     private final String colour;
 
-    enum Size {LARGE, SMALL;}
+    enum Size {LARGE, SMALL}
 
     /**
      * Purpose: Default Constructor to initialize vehicle name & name.
@@ -47,26 +47,62 @@ public class Vehicle implements Comparable<Vehicle> {
         this.isDriverHandicapped = isDriverHandicapped;
     }
 
+    /**
+     * Purpose: Getter method used for sending data
+     *          to other classes.
+     *
+     * @return : Returns size of the vehicle (LARGE/SMALL)
+     */
     public Size getVehicleSize() {
         return vehicleSize;
     }
 
+    /**
+     * Purpose: Getter method used for sending data
+     *          to other classes.
+     *
+     * @return : Returns true if the driver is handicapped.
+     */
     public boolean isDriverHandicapped() {
         return isDriverHandicapped;
     }
 
+    /**
+     * Purpose: Getter method used for sending data
+     *          to other classes.
+     *
+     * @return : Returns plate number of the vehicle
+     */
     public String getVehicleNumber() {
         return vehicleNumber;
     }
 
+    /**
+     * Purpose: Getter method used for sending data
+     *          to other classes.
+     *
+     * @return : Returns name of the vehicle.
+     */
     public String getVehicleName() {
         return vehicleName;
     }
 
+    /**
+     * Purpose: Getter method used for sending data
+     *          to other classes.
+     *
+     * @return : Returns colour of the vehicle
+     */
     public String getColour() {
         return this.colour;
     }
 
+    /**
+     * Purpose : This method is used for comparing two vehicles WRT name.
+     *
+     * @param that : Vehicle object for comparison with current vehicle
+     * @return : Returns integer by comparing names alphabetically.
+     */
     @Override
     public int compareTo(Vehicle that) {
         return this.getVehicleName().compareTo(that.getVehicleName());

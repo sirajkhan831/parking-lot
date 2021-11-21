@@ -19,6 +19,7 @@ import java.util.Map;
 
 public class ParkingLot implements Comparable<ParkingLot> {
 
+    private final char lotName;
     private final ParkingLotOwner owner;
     private final AirportSecurity airportSecurity;
     private final HashMap<Integer, Vehicle> vehicles = new HashMap<>();
@@ -30,10 +31,11 @@ public class ParkingLot implements Comparable<ParkingLot> {
      * @param owner:           Sets the owner of the lot.
      * @param airportSecurity: Sets the airport security head of the lot.
      **/
-    public ParkingLot(int maxCapacity, ParkingLotOwner owner, AirportSecurity airportSecurity) {
+    public ParkingLot(int maxCapacity, ParkingLotOwner owner, AirportSecurity airportSecurity, char lotName) {
         this.owner = owner;
         this.airportSecurity = airportSecurity;
         setMaxCapacity(maxCapacity);
+        this.lotName = lotName;
     }
 
     /**
@@ -175,26 +177,14 @@ public class ParkingLot implements Comparable<ParkingLot> {
      *
      * @return : returns the number of vehicle parked at the lot.
      */
-    public int getTotalVehicle() {
-        int currentVehicle = 0;
+    public int getCurrentCapacity() {
+        int currentCapacity = 0;
         for (Map.Entry<Integer, Vehicle> entry : vehicles.entrySet()) {
             if (entry.getValue() != null) {
-                currentVehicle++;
+                currentCapacity++;
             }
         }
-        return currentVehicle;
-    }
-
-    /**
-     * Purpose : This method is used to compare two different parking lots
-     * by the number of vehicle parked.
-     *
-     * @param that : ParkingLot Object used to compare with current Lot
-     * @return : returns int value by comparing the two lots.
-     */
-    @Override
-    public int compareTo(ParkingLot that) {
-        return this.getTotalVehicle() - that.getTotalVehicle();
+        return currentCapacity;
     }
 
     /**
@@ -222,6 +212,27 @@ public class ParkingLot implements Comparable<ParkingLot> {
     public AirportSecurity getAirportSecurity() {
         return airportSecurity;
     }
+
+    /**
+     * Purpose : Getter method to get the lot's name for other classes.
+     *
+     * @return : Returns the name of the lot as String.
+     */
+    public char getLotName() {
+        return lotName;
+    }
+
+    /**
+     * Purpose : This method is used to compare two different parking lots
+     * by the number of vehicle parked.
+     *
+     * @param that : ParkingLot Object used to compare with current Lot
+     * @return : returns int value by comparing the two lots.
+     */
+    @Override
+    public int compareTo(ParkingLot that) {
+        if (this.getCurrentCapacity() != that.getCurrentCapacity()) {
+            return this.getCurrentCapacity() - that.getCurrentCapacity();
+        } else return this.getLotName() - that.getLotName();
+    }
 }
-
-

@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParkingLotTest {
+public class ParkingLotTestCases {
     ParkingLotOwner owner = null;
     Vehicle bmw = null;
     AirportSecurity airportSecurity = null;
@@ -121,7 +121,7 @@ public class ParkingLotTest {
     @Test
     void givenAVehicle_ifRequired_ShouldReturnTimeStamp() throws ParkingLotException {
         parkingSystem.park(bmw, LocalDateTime.now());
-        Assertions.assertEquals(LocalDateTime.now(), parkingSystem.getLot(bmw).getTimeStamp(bmw));
+        Assertions.assertEquals(LocalDateTime.now().format(formatter), parkingSystem.getLot(bmw).getTimeStamp(bmw).format(formatter));
     }
 
     @Test
@@ -187,7 +187,7 @@ public class ParkingLotTest {
         parkingSystem.park(toyota, LocalDateTime.parse("19/11/2021-21:55", formatter));
         parkingSystem.park(swift, LocalDateTime.parse("19/11/2021-21:01", formatter));
         parkingSystem.park(alto, LocalDateTime.parse("19/11/2021-21:01", formatter));
-        Assertions.assertEquals(List.of(toyota), police.getVehicleByDuration(10));
+        Assertions.assertEquals(List.of(toyota), police.getVehicleByDuration(30));
     }
 
     @Test

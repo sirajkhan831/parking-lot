@@ -5,14 +5,13 @@ import java.util.*;
 
 /******************************************************************************
  *
- *  Purpose: Parking lot system which ensures parking lot for each vehicle.
+ *  Purpose: Parking lot system which selects parking lot for each vehicle.
  *
  *  @author Siraj
  *  @version 1.0
  *  @since 17-11-2021
  *
  ******************************************************************************/
-
 public class ParkingLotSystem {
     private ParkingLot A;
     private ParkingLot B;
@@ -47,10 +46,10 @@ public class ParkingLotSystem {
      * @param maxCapacity : Parameter for setting the maximum capacity of lots.
      */
     public void setMaxCapacity(int maxCapacity) {
-        A = new ParkingLot(maxCapacity, owner, security);
-        B = new ParkingLot(maxCapacity, owner, security);
-        C = new ParkingLot(maxCapacity, owner, security);
-        D = new ParkingLot(maxCapacity, owner, security);
+        A = new ParkingLot(maxCapacity, owner, security, 'A');
+        B = new ParkingLot(maxCapacity, owner, security, 'B');
+        C = new ParkingLot(maxCapacity, owner, security, 'C');
+        D = new ParkingLot(maxCapacity, owner, security, 'D');
     }
 
     /**
@@ -64,10 +63,6 @@ public class ParkingLotSystem {
         }
         if (!singleLotParking) {
             Collections.sort(parkingLots);
-            Collections.reverse(parkingLots);
-        }
-        if (vehicle.getVehicleSize() == Vehicle.Size.LARGE) {
-            Collections.reverse(parkingLots);
         }
         parkingLots.get(0).park(vehicle, time);
         vehicleParkingLotHashMap.put(vehicle, parkingLots.get(0));
@@ -84,16 +79,6 @@ public class ParkingLotSystem {
     }
 
     /**
-     * Purpose : Used to get the vehicle's parking lot.
-     *
-     * @param vehicle : Takes Vehicle object and finds its lot.
-     * @return : Lot of the given vehicle
-     */
-    public ParkingLot getLot(Vehicle vehicle) {
-        return vehicleParkingLotHashMap.get(vehicle);
-    }
-
-    /**
      * Purpose : Used to find if the given vehicle is parked.
      *
      * @param vehicle : Checks the given vehicle's parking status.
@@ -101,6 +86,16 @@ public class ParkingLotSystem {
      */
     public boolean isVehicleParked(Vehicle vehicle) {
         return vehicleParkingLotHashMap.containsKey(vehicle);
+    }
+
+    /**
+     * Purpose : Used to get the vehicle's parking lot.
+     *
+     * @param vehicle : Takes Vehicle object and finds its lot.
+     * @return : Lot of the given vehicle
+     */
+    public ParkingLot getLot(Vehicle vehicle) {
+        return vehicleParkingLotHashMap.get(vehicle);
     }
 
     /**

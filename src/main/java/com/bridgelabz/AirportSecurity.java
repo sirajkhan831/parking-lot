@@ -13,9 +13,9 @@ public class AirportSecurity implements Observer {
     private boolean isAtMaxCapacity;
 
     /**
-     * Purpose -> This method is for assigning full parking lot.
+     * Purpose : This method is for assigning full parking lot.
      *
-     * @param capacityCheck -> Sets lot at max capacity if true.
+     * @param capacityCheck : Sets lot at max capacity if true.
      */
     @Override
     public void capacityFull(boolean capacityCheck) {
@@ -23,7 +23,7 @@ public class AirportSecurity implements Observer {
     }
 
     /**
-     * @return -> Returns true if parking lot is at max capacity
+     * @return : Returns true if parking lot is at max capacity
      */
     @Override
     public boolean isAtMaxCapacity() {
