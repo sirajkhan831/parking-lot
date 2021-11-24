@@ -16,7 +16,6 @@ import java.util.Map;
  *  @since 10-11-2021
  *
  ******************************************************************************/
-
 public class ParkingLot implements Comparable<ParkingLot> {
 
     private final char lotName;
@@ -26,7 +25,7 @@ public class ParkingLot implements Comparable<ParkingLot> {
     private final HashMap<Vehicle, LocalDateTime> vehicleTimeStamp = new HashMap<>();
 
     /**
-     * Purpose: Default Constructor to initialize maxCapacity, owner & security
+     * Purpose: Constructor to initialize maxCapacity, owner & security
      *
      * @param owner:           Sets the owner of the lot.
      * @param airportSecurity: Sets the airport security head of the lot.
@@ -130,6 +129,20 @@ public class ParkingLot implements Comparable<ParkingLot> {
     }
 
     /**
+     * Purpose : This method is used to compare two different parking lots
+     * by the number of vehicle parked.
+     *
+     * @param that : ParkingLot Object used to compare with current Lot
+     * @return : returns int value by comparing the two lots.
+     */
+    @Override
+    public int compareTo(ParkingLot that) {
+        if (this.getCurrentCapacity() != that.getCurrentCapacity()) {
+            return this.getCurrentCapacity() - that.getCurrentCapacity();
+        } else return this.getLotName() - that.getLotName();
+    }
+
+    /**
      * Purpose: Used is used to locate the vehicle in the lot.
      *
      * @param vehicle: Required to check the given vehicle position
@@ -188,6 +201,8 @@ public class ParkingLot implements Comparable<ParkingLot> {
     }
 
     /**
+     * Purpose : Getter method used for getting time of parking
+     *
      * @param vehicle: Required to check the given vehicle position
      * @return : Returns vehicle timestamp
      */
@@ -220,19 +235,5 @@ public class ParkingLot implements Comparable<ParkingLot> {
      */
     public char getLotName() {
         return lotName;
-    }
-
-    /**
-     * Purpose : This method is used to compare two different parking lots
-     * by the number of vehicle parked.
-     *
-     * @param that : ParkingLot Object used to compare with current Lot
-     * @return : returns int value by comparing the two lots.
-     */
-    @Override
-    public int compareTo(ParkingLot that) {
-        if (this.getCurrentCapacity() != that.getCurrentCapacity()) {
-            return this.getCurrentCapacity() - that.getCurrentCapacity();
-        } else return this.getLotName() - that.getLotName();
     }
 }

@@ -7,7 +7,6 @@ package com.bridgelabz;
  *  @author Siraj
  *  @version 1.0
  *  @since 11-11-2021
- *
  ******************************************************************************/
 public class Vehicle implements Comparable<Vehicle> {
     private final String vehicleNumber;
@@ -19,7 +18,7 @@ public class Vehicle implements Comparable<Vehicle> {
     enum Size {LARGE, SMALL}
 
     /**
-     * Purpose: Default Constructor to initialize vehicle name & name.
+     * Purpose: Constructor to initialize vehicle parameters.
      *
      * @param vehicleNumber : vehicle number used to store vehicle's unique number
      * @param vehicleName   : vehicle name used for vehicle's name.
@@ -32,7 +31,7 @@ public class Vehicle implements Comparable<Vehicle> {
     }
 
     /**
-     * Purpose: Default Constructor to initialize vehicle name & name.
+     * Purpose: Constructor to initialize vehicle parameters.
      *
      * @param vehicleNumber       : vehicle number used to store vehicle's unique number
      * @param vehicleName         : vehicle name used for vehicle's name.

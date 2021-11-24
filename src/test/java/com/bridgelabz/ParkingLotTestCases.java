@@ -165,7 +165,7 @@ public class ParkingLotTestCases {
         parkingSystem.park(swiftWhite, LocalDateTime.parse("18/11/2021-21:18", formatter));
         parkingSystem.park(alto, LocalDateTime.parse("18/11/2021-22:38", formatter));
         parkingSystem.park(swiftBlue, LocalDateTime.parse("18/11/2021-22:18", formatter));
-        Assertions.assertEquals(List.of(swiftWhite), police.getVehicleByNameAndColour("Swift", "WHITE"));
+        Assertions.assertEquals(List.of(toyota), police.getVehicleByNameAndColour("toyota", "BLUE"));
     }
 
     @Test

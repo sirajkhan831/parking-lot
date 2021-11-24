@@ -10,7 +10,6 @@ import java.util.*;
  *  @author Siraj
  *  @version 1.0
  *  @since 17-11-2021
- *
  ******************************************************************************/
 public class ParkingLotSystem {
     private ParkingLot A;
@@ -24,7 +23,7 @@ public class ParkingLotSystem {
     private final HashMap<Vehicle, ParkingLot> vehicleParkingLotHashMap = new HashMap<>();
 
     /**
-     * Purpose: Police Department class used to give lot's security information.
+     * Purpose: Constructor to initialize the parameters for parking the vehicles.
      *
      * @param maxCapacity     : Parameter for setting the maximum capacity of lots.
      * @param owner           : Used for setting the owner of the lot.
@@ -53,6 +52,8 @@ public class ParkingLotSystem {
     }
 
     /**
+     * Purpose : Used to park the vehicles by assigning lots.
+     *
      * @param vehicle : Takes Vehicle object and parks the given vehicle.
      * @param time    : Takes LocalTime and sets the parking time of vehicle.
      * @throws ParkingLotException : Custom exception for invalid parking.

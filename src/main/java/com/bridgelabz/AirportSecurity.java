@@ -7,7 +7,6 @@ package com.bridgelabz;
  *  @author Siraj
  *  @version 1.0
  *  @since 13-11-2021
- *
  ******************************************************************************/
 public class AirportSecurity implements Observer {
     private boolean isAtMaxCapacity;

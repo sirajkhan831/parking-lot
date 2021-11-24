@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
  *  @author Siraj
  *  @version 1.0
  *  @since 18-11-2021
- *
  ******************************************************************************/
 public class PoliceDepartment {
     private final ParkingLotSystem parkingLotSystem;

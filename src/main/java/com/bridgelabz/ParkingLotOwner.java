@@ -7,15 +7,14 @@ package com.bridgelabz;
  *  @author Siraj
  *  @version 1.0
  *  @since 13-11-2021
- *
  ******************************************************************************/
 public class ParkingLotOwner implements Observer {
     private boolean isAtMaxCapacity;
 
     /**
-     * Purpose -> This method is for assigning full parking lot.
+     * Purpose : This method is for assigning full parking lot.
      *
-     * @param capacityCheck ->
+     * @param capacityCheck : if true sets parking lot at max.
      */
     @Override
     public void capacityFull(boolean capacityCheck) {
@@ -23,7 +22,7 @@ public class ParkingLotOwner implements Observer {
     }
 
     /**
-     * @return -> Returns true if parking lot is at max capacity
+     * @return : Returns true if parking lot is at max capacity
      */
     @Override
     public boolean isAtMaxCapacity() {
